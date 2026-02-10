@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' })
 
 export const metadata = {
-  metadataBase: new URL('http://localhost:3001'),
+  metadataBase: new URL('https://karthik-ramadugu-portfolio.vercel.app'),
   title: 'Karthik Ramadugu - Software Engineer',
   description: 'Computer Science graduate student at University of Dayton specializing in backend development. Passionate about building scalable solutions and innovative software.',
   keywords: 'Software Engineer, Full Stack Developer, Backend Development, University of Dayton, Computer Science, React, Node.js, Python',
