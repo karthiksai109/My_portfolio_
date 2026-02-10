@@ -1,33 +1,23 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Github, Linkedin, Mail, Phone, Send, Menu, X, Code, Terminal, Cpu, Cloud, Database, Smartphone, ExternalLink, Sparkles, MapPin, Briefcase, GraduationCap, Award, Users, Star, ChevronRight, Zap, Brain, Rocket, Target, Gamepad2, MessageCircle, Facebook, Globe, ArrowRight, Coffee, Camera, User, Image } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Github, Linkedin, Mail, Phone, Menu, X, Code, Terminal, Cpu, Cloud, Database, Smartphone, ExternalLink, MapPin, Briefcase, GraduationCap, Award, ChevronRight, Zap, Brain, Rocket, Target, Gamepad2, ArrowRight } from 'lucide-react'
 
-type ChatMessage = {
-  type: 'bot' | 'user'
-  text: string
-}
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [showChatbot, setShowChatbot] = useState(false)
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    { type: 'bot', text: "Hi! I'm Karthik's AI assistant. I can help you learn about his journey from ECE to Software Development, his versatility across tech stacks, and connect you directly!" }
-  ])
-  const [currentMessage, setCurrentMessage] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-  const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
+    const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
 
   const roles = [
     "Karthik Ramadugu",
-    "Software Developer",
-    "Innovative Thinker", 
-    "Code Magician",
-    "Full-Stack Engineer",
-    "Problem Solver",
-    "Tech Enthusiast"
+    "Full-Stack AI Ninja",
+    "Innovation Architect", 
+    "Code Warrior",
+    "AI Solutions Engineer",
+    "Digital Transformer",
+    "Tech Visionary"
   ]
 
   useEffect(() => {
@@ -129,44 +119,12 @@ export default function Home() {
     }
   ]
 
-  const hobbies = [
-    { name: "Cricket", icon: <Target className="w-6 h-6" />, description: "Passionate about cricket, both playing and following sport" },
-    { name: "Coffee", icon: <Coffee className="w-6 h-6" />, description: "Coffee enthusiast who loves exploring different brewing methods" }
-  ]
-
+  
   const achievements = [
     { title: "LinkedIn Top Voice", description: "Recognized for technical contributions", icon: <Award className="w-5 h-5" /> },
     { title: "5+ Projects Delivered", description: "Successfully completed client projects", icon: <Target className="w-5 h-5" /> },
     { title: "Open Source Contributor", description: "Active in GitHub community", icon: <Github className="w-5 h-5" /> }
   ]
-
-  const handleChatSend = () => {
-    if (currentMessage.trim()) {
-      const userMessage: ChatMessage = { type: 'user', text: currentMessage }
-      setChatMessages(prev => [...prev, userMessage])
-      setCurrentMessage('')
-      setIsTyping(true)
-
-      setTimeout(() => {
-        const botResponse = generateBotResponse(currentMessage)
-        setChatMessages(prev => [...prev, botResponse])
-        setIsTyping(false)
-      }, 1500)
-    }
-  }
-
-  const generateBotResponse = (message: string): ChatMessage => {
-    const responses = [
-      "Karthik's journey from ECE to Computer Science showcases his adaptability and passion for technology. He's mastered everything from hardware to full-stack development!",
-      "His versatility spans Python to MERN stack, making him a valuable asset for any team. Available to join immediately and open to learning new skills!",
-      "Karthik is open to relocation and excited about new challenges. His unique background gives him both hardware and software perspectives!",
-      "I can connect you directly with Karthik via Gmail at karthiksaidham2001@gmail.com or schedule a call. He's available immediately!",
-      "Want to see his versatility in action? Check out interactive game section that showcases his problem-solving skills!"
-    ]
-    
-    const randomResponse = responses[Math.floor(Math.random() * responses.length)]
-    return { type: 'bot', text: randomResponse } as const
-  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -193,25 +151,34 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="fixed inset-0 grid-background opacity-20 pointer-events-none" />
+    <div className="min-h-screen bg-white text-gray-900">
+      <div className="fixed inset-0 opacity-5 pointer-events-none" 
+           style={{
+             backgroundImage: `
+               linear-gradient(45deg, #0066ff 25%, transparent 25%),
+               linear-gradient(-45deg, #0066ff 25%, transparent 25%),
+               linear-gradient(45deg, transparent 75%, #0066ff 75%),
+               linear-gradient(-45deg, transparent 75%, #0066ff 75%)`,
+             backgroundSize: '20px 20px',
+             backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+           }} />
       
-      <nav className="fixed top-0 w-full z-50 glass-strong px-6 py-4">
+      <nav className="fixed top-0 w-full z-50 glass-strong px-6 py-4 border-b border-gray-200">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-2xl font-bold font-space-grotesk gradient-text"
+            className="text-2xl font-bold font-jetbrains gradient-text"
           >
-            KR
+            <span className="terminal-text">KR</span>
           </motion.div>
           
           <div className="hidden md:flex items-center gap-8">
-            {['home', 'journey', 'skills', 'projects', 'hobbies', 'achievements', 'contact'].map((section) => (
+            {['home', 'journey', 'skills', 'projects', 'achievements', 'contact'].map((section) => (
               <a
                 key={section}
                 href={`#${section}`}
-                className="capitalize text-gray-300 hover:text-white transition-colors font-medium"
+                className="capitalize text-gray-600 hover:text-primary-blue transition-colors font-medium font-jetbrains text-sm"
               >
                 {section}
               </a>
@@ -220,14 +187,8 @@ export default function Home() {
 
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setShowChatbot(true)}
-              className="p-2 rounded-full glass hover-glow hidden md:block"
-            >
-              <MessageCircle className="w-5 h-5" />
-            </button>
-            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg glass"
+              className="md:hidden p-2 rounded-lg ninja-card"
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -243,34 +204,34 @@ export default function Home() {
           className="text-center z-10 max-w-5xl"
         >
           <motion.div variants={itemVariants} className="mb-8 flex flex-wrap gap-4 justify-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">Available for Full-time & Contract Roles</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full ninja-card">
+              <div className="w-2 h-2 bg-terminal-green rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium font-jetbrains">Available for Full-time & Contract</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border-blue-500/50">
-              <MapPin className="w-4 h-4 text-blue-500" />
-              <span className="text-sm font-medium">Open to Relocation</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full ninja-card">
+              <MapPin className="w-4 h-4 text-primary-blue" />
+              <span className="text-sm font-medium font-jetbrains">Open to Relocation</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border-blue-500/50">
-              <Zap className="w-4 h-4 text-blue-500" />
-              <span className="text-sm font-medium">Available to Join Immediately</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full ninja-card">
+              <Zap className="w-4 h-4 text-ninja-purple" />
+              <span className="text-sm font-medium font-jetbrains">Ready to Deploy</span>
             </div>
           </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className="text-5xl md:text-7xl font-bold font-space-grotesk mb-6"
+            className="text-5xl md:text-7xl font-bold font-jetbrains mb-6"
           >
-            I'M <span className="gradient-text">{roles[currentRoleIndex]}</span>
+            <span className="terminal-text">&gt;</span> <span className="gradient-text">{roles[currentRoleIndex]}</span><span className="terminal-cursor"></span>
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="text-xl md:text-2xl mb-8 text-gray-400 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl mb-8 text-gray-600 max-w-3xl mx-auto leading-relaxed font-jetbrains"
           >
-            From <span className="text-orange-500 font-semibold">ECE foundations</span> to <span className="text-blue-500 font-semibold">Computer Science excellence</span>. 
-            Mastered <span className="text-green-500 font-semibold">Python</span> to <span className="text-purple-500 font-semibold">MERN stack</span> development. 
-            <span className="text-yellow-500 font-semibold"> Open to learning new skills</span> for any project!
+            From <span className="coffee-accent font-semibold">ECE foundations</span> to <span className="text-primary-blue font-semibold">AI innovation excellence</span>. 
+            Mastered <span className="text-ninja-purple font-semibold">Python</span> to <span className="text-primary-blue font-semibold">MERN stack</span> development. 
+            <span className="text-terminal-green font-semibold"> Always learning new tech</span> for any project!
           </motion.p>
 
           <motion.div
@@ -278,12 +239,12 @@ export default function Home() {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
           >
             <a href="#contact" className="btn-primary flex items-center justify-center gap-2 text-lg px-8 py-4">
-              <Send className="w-5 h-5" />
-              Hire Me Now
+              <Terminal className="w-5 h-5" />
+              Deploy Karthik
             </a>
-            <a href="#journey" className="px-8 py-4 glass-strong rounded-xl font-semibold hover-lift flex items-center justify-center gap-2 text-lg">
+            <a href="#journey" className="px-8 py-4 ninja-card rounded-xl font-semibold hover-lift flex items-center justify-center gap-2 text-lg border border-gray-200">
               <Rocket className="w-5 h-5" />
-              My Journey
+              View Journey
             </a>
             <a href="/game" className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl font-semibold hover-lift flex items-center justify-center gap-2 text-lg">
               <Gamepad2 className="w-5 h-5" />
@@ -492,36 +453,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="hobbies" className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-4xl md:text-5xl font-bold font-space-grotesk text-center mb-16 gradient-text"
-          >
-            Beyond Code
-          </motion.h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {hobbies.map((hobby, index) => (
-              <motion.div
-                key={hobby.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className="glass-strong p-6 rounded-xl text-center hover-lift group"
-              >
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 mb-4 group-hover:scale-110 transition-transform mx-auto`}>
-                  {hobby.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{hobby.name}</h3>
-                <p className="text-sm text-gray-400">{hobby.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      
       <section id="achievements" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.h2
@@ -611,78 +543,15 @@ export default function Home() {
               <Github size={20} />
               View GitHub
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer"
+            <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer"
                className="px-8 py-3 bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-              <Facebook size={20} />
-              Facebook
+              <Linkedin size={20} />
+              LinkedIn
             </a>
-            <button
-              onClick={() => setShowChatbot(true)}
-              className="btn-primary flex items-center justify-center gap-2"
-            >
-              <MessageCircle size={20} />
-              AI Assistant
-            </button>
           </motion.div>
         </div>
       </section>
 
-      <AnimatePresence>
-        {showChatbot && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6"
-            onClick={() => setShowChatbot(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="glass-strong rounded-2xl max-w-md w-full h-96 flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-4 border-b border-gray-700">
-                <h3 className="text-xl font-bold gradient-text">Karthik's AI Assistant</h3>
-                <p className="text-sm text-gray-400">Learn about his journey & connect directly!</p>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                {chatMessages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-xs px-4 py-2 rounded-lg ${
-                        msg.type === 'user'
-                          ? 'bg-blue-500 text-white'
-                          : 'glass-strong text-gray-400'
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
-                  </div>
-                ))}
-                
-                {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="glass-strong px-4 py-2 rounded-lg">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-                          </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          </div>
   )
 }
