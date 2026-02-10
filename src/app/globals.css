@@ -315,11 +315,17 @@ body {
 
 /* ===== CONTACT CARD ===== */
 .contact-card {
+  display: block;
   background: var(--paper);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 2rem;
   text-align: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+  color: inherit;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .contact-card:hover {

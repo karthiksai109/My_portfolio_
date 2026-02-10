@@ -231,9 +231,9 @@ export default function Home() {
       />
       
       {/* Dynamic Background */}
-      <div className="fixed inset-0 bg-grid-pattern opacity-30" />
+      <div className="fixed inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
       <div 
-        className="fixed inset-0 bg-gradient-to-br from-[#2563eb]/5 via-transparent to-[#6d28d9]/5"
+        className="fixed inset-0 bg-gradient-to-br from-[#2563eb]/5 via-transparent to-[#6d28d9]/5 pointer-events-none"
         style={{ transform: `translateY(${scrollY * 0.3}px)` }}
       />
 
