@@ -714,21 +714,6 @@ export default function Home() {
               <p className="text-[#8888a4] text-sm">Let&apos;s Connect</p>
             </a>
           </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <a href="https://github.com/karthiksai109" target="_blank" rel="noopener noreferrer" className="btn-primary">
-              <Github className="w-5 h-5" /> View GitHub
-            </a>
-            <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              <Linkedin className="w-5 h-5" /> LinkedIn
-            </a>
-          </motion.div>
         </div>
       </section>
 
