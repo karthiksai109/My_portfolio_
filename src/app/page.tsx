@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { 
   Github, 
   Linkedin, 
@@ -16,7 +16,6 @@ import {
   Database, 
   ExternalLink, 
   MapPin, 
-  Briefcase, 
   GraduationCap, 
   Award, 
   ChevronRight, 
@@ -24,14 +23,22 @@ import {
   Brain, 
   Rocket, 
   Target, 
-  Gamepad2 
+  Gamepad2,
+  Coffee,
+  Sparkles
 } from 'lucide-react'
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
-
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [scrollY, setScrollY] = useState(0)
+  
+  const containerRef = useRef(null)
+  const { scrollYProgress } = useScroll()
+  const smoothScrollY = useSpring(scrollYProgress, { stiffness: 400, damping: 40 })
+  
   const roles = [
     "Full-Stack AI Engineer",
     "Innovation Architect", 
@@ -56,6 +63,24 @@ export default function Home() {
 
     return () => clearInterval(interval)
   }, [currentRoleIndex, isDeleting])
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
+    
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('scroll', handleScroll)
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const skills = [
     { name: 'React/Next.js', level: 95, icon: <Code className="w-5 h-5" />, category: 'Frontend' },
@@ -128,135 +153,319 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div ref={containerRef} className="min-h-screen bg-white text-gray-900 overflow-hidden">
+      {/* Advanced Mouse Follower */}
+      <div 
+        className="fixed w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-screen"
+        style={{
+          background: 'radial-gradient(circle, rgba(0,102,255,0.3) 0%, transparent 70%)',
+          left: mousePosition.x - 12,
+          top: mousePosition.y - 12,
+          transform: 'translate(0, 0)',
+        }}
+      />
+      
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 bg-grid-pattern opacity-30" />
+      <div 
+        className="fixed inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50"
+        style={{
+          transform: `translateY(${scrollY * 0.5}px)`,
+        }}
+      />
+
+      {/* Floating Elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-20"
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${10 + i * 12}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: 3 + i,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+      <motion.nav 
+        className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
+        style={{
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+        }}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-2xl font-bold font-jetbrains gradient-text"
+              className="text-2xl font-bold font-space-grotesk gradient-text-blue cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              KR
+              <span className="terminal-prompt">karthik@dev</span>
             </motion.div>
             
-            <div className="hidden md:flex items-center gap-8">
-              {['home', 'journey', 'skills', 'projects', 'achievements', 'contact'].map((section) => (
-                <a
+            <div className="hidden md:flex items-center gap-2">
+              {['home', 'journey', 'skills', 'projects', 'achievements', 'contact'].map((section, index) => (
+                <motion.a
                   key={section}
                   href={`#${section}`}
-                  className="nav-link capitalize"
+                  className="nav-link capitalize relative group"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
                 >
                   {section}
-                </a>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.a>
               ))}
             </div>
 
-            <button
+            <motion.button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg pro-card"
+              className="md:hidden p-3 rounded-xl card-glass"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+            </motion.button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-20">
-        <div className="absolute inset-0 opacity-5 pointer-events-none" 
-             style={{
-               backgroundImage: `
-                 linear-gradient(45deg, #0066ff 25%, transparent 25%),
-                 linear-gradient(-45deg, #0066ff 25%, transparent 25%),
-                 linear-gradient(45deg, transparent 75%, #0066ff 75%),
-                 linear-gradient(-45deg, transparent 75%, #0066ff 75%)`,
-               backgroundSize: '20px 20px',
-               backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
-             }} />
+      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-24">
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-dots-pattern" />
+        </div>
         
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center z-10 max-w-5xl"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="text-center z-10 max-w-6xl relative"
         >
-          <div className="mb-8 flex flex-wrap gap-4 justify-center">
-            <div className="status-badge status-available">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              Available for Full-time & Contract
-            </div>
-            <div className="status-badge status-ready">
-              <Zap className="w-4 h-4" />
-              Ready to Deploy
-            </div>
-            <div className="status-badge status-open">
-              <MapPin className="w-4 h-4" />
-              Open to Relocation
-            </div>
-          </div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+          {/* Floating Status Cards */}
+          <motion.div 
+            className="mb-12 flex flex-wrap gap-6 justify-center"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-5xl md:text-7xl font-bold font-jetbrains mb-6"
           >
-            <span className="terminal-text">karthik@portfolio:~$</span> <span className="gradient-text">{roles[currentRoleIndex]}</span>
-            <span className="terminal-cursor"></span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-xl md:text-2xl mb-8 text-gray-600 max-w-3xl mx-auto leading-relaxed font-jetbrains"
-          >
-            From <span className="coffee-text font-semibold">ECE foundations</span> to <span className="text-primary-blue font-semibold">AI innovation excellence</span>. 
-            Mastered <span className="text-ninja-purple font-semibold">Python</span> to <span className="text-primary-blue font-semibold">MERN stack</span> development. 
-            <span className="text-terminal-green font-semibold"> Always learning cutting-edge tech</span> for transformative solutions!
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-          >
-            <a href="#contact" className="btn-primary">
-              <Terminal className="w-5 h-5" />
-              Deploy Karthik
-            </a>
-            <a href="#projects" className="btn-secondary">
-              <Rocket className="w-5 h-5" />
-              View Projects
-            </a>
-            <a href="/game" className="btn-secondary">
-              <Gamepad2 className="w-5 h-5" />
-              Challenge Me
-            </a>
+            <motion.div 
+              className="status-badge status-available floating"
+              style={{ animationDelay: '0s' }}
+              whileHover={{ scale: 1.05, rotate: [0, 1, -1, 0] }}
+            >
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+              <span className="font-jetbrains">Available for Full-time</span>
+            </motion.div>
+            
+            <motion.div 
+              className="status-badge status-ready floating"
+              style={{ animationDelay: '0.5s' }}
+              whileHover={{ scale: 1.05, rotate: [0, 1, -1, 0] }}
+            >
+              <Zap className="w-4 h-4" />
+              <span className="font-jetbrains">Ready to Deploy</span>
+            </motion.div>
+            
+            <motion.div 
+              className="status-badge status-open floating"
+              style={{ animationDelay: '1s' }}
+              whileHover={{ scale: 1.05, rotate: [0, 1, -1, 0] }}
+            >
+              <MapPin className="w-4 h-4" />
+              <span className="font-jetbrains">Open to Relocation</span>
+            </motion.div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+          {/* Main Terminal Display */}
+          <motion.div 
+            className="card-gradient p-8 md:p-12 mb-8 relative overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            {/* Terminal Header */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <span className="ml-4 text-sm font-jetbrains text-gray-500">karthik@portfolio:~</span>
+            </div>
+            
+            {/* Terminal Content */}
+            <motion.div className="text-left">
+              <div className="font-jetbrains text-lg mb-4">
+                <span className="terminal-prompt">$</span> 
+                <span className="ml-2">whoami</span>
+              </div>
+              
+              <motion.h1 
+                className="text-4xl md:text-7xl font-bold font-jetbrains mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                <span className="terminal-text">Karthik Ramadugu</span>
+                <span className="terminal-cursor"></span>
+              </motion.h1>
+              
+              <div className="font-jetbrains text-lg mb-4">
+                <span className="terminal-prompt">$</span> 
+                <span className="ml-2">cat current_role.txt</span>
+              </div>
+              
+              <motion.div 
+                className="text-3xl md:text-5xl font-bold font-jetbrains gradient-text-blue mb-6"
+                key={currentRoleIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {roles[currentRoleIndex]}
+                <span className="terminal-cursor"></span>
+              </motion.div>
+              
+              <div className="font-jetbrains text-lg mb-6">
+                <span className="terminal-prompt">$</span> 
+                <span className="ml-2">echo "$description"</span>
+              </div>
+              
+              <motion.p 
+                className="text-lg md:text-xl text-gray-600 font-jetbrains leading-relaxed max-w-4xl"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+              >
+                From <span className="gradient-text-coffee font-semibold">ECE foundations</span> to 
+                <span className="gradient-text-blue font-semibold"> AI innovation excellence</span>. 
+                Mastered <span className="gradient-text-cyan font-semibold">Python</span> to 
+                <span className="gradient-text-blue font-semibold">MERN stack</span> development. 
+                <span className="terminal-text font-semibold"> Always building cutting-edge solutions</span> 
+                that transform ideas into reality!
+              </motion.p>
+            </motion.div>
+            
+            {/* Coffee & Cricket Personal Touch */}
+            <div className="absolute top-4 right-4 flex gap-3">
+              <motion.div 
+                className="p-2 rounded-lg bg-gradient-to-r from-amber-100 to-amber-200"
+                whileHover={{ scale: 1.1, rotate: 360 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Coffee className="w-5 h-5 text-amber-700" />
+              </motion.div>
+              <motion.div 
+                className="p-2 rounded-lg bg-gradient-to-r from-green-100 to-green-200"
+                whileHover={{ scale: 1.1, rotate: 360 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Target className="w-5 h-5 text-green-700" />
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Interactive Command Buttons */}
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-6 justify-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
+            transition={{ delay: 1.4 }}
+          >
+            <motion.a 
+              href="#contact" 
+              className="btn-primary group"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Terminal className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              <span>Deploy Karthik</span>
+              <Sparkles className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </motion.a>
+            
+            <motion.a 
+              href="#projects" 
+              className="btn-secondary group"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Rocket className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <span>View Projects</span>
+              <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+            </motion.a>
+            
+            <motion.a 
+              href="/game" 
+              className="btn-ghost group border-2 border-dashed border-gray-300 hover:border-primary-blue"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Gamepad2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              <span>Challenge Me</span>
+            </motion.a>
+          </motion.div>
+
+          {/* Social Links with Advanced Hover */}
+          <motion.div 
             className="flex gap-6 justify-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.6 }}
           >
-            <a href="https://github.com/karthiksai109" target="_blank" rel="noopener noreferrer" 
-               className="p-3 rounded-full pro-card hover:scale-110 transition-transform">
-              <Github className="w-6 h-6" />
-            </a>
-            <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer"
-               className="p-3 rounded-full pro-card hover:scale-110 transition-transform">
-              <Linkedin className="w-6 h-6" />
-            </a>
-            <a href="mailto:karthiksaidham2001@gmail.com" 
-               className="p-3 rounded-full pro-card hover:scale-110 transition-transform">
-              <Mail className="w-6 h-6" />
-            </a>
+            {[
+              { href: "https://github.com/karthiksai109", icon: Github, label: "GitHub" },
+              { href: "https://www.linkedin.com/in/ramadugukarthik/", icon: Linkedin, label: "LinkedIn" },
+              { href: "mailto:karthiksaidham2001@gmail.com", icon: Mail, label: "Email" }
+            ].map((social, index) => (
+              <motion.a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <div className="p-4 rounded-2xl card-glass relative overflow-hidden">
+                  <social.icon className="w-6 h-6 relative z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <social.icon className="w-6 h-6 absolute inset-0 m-auto text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  {social.label}
+                </div>
+              </motion.a>
+            ))}
           </motion.div>
+        </motion.div>
+        
+        {/* Scroll Indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, 10, 0] }}
+          transition={{ delay: 2, duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-gray-300 rounded-full mt-2" />
+          </div>
         </motion.div>
       </section>
 
@@ -402,104 +611,154 @@ export default function Home() {
       </section>
 
       
+      {/* Achievements Section */}
       <section id="achievements" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-4xl md:text-5xl font-bold font-space-grotesk text-center mb-16 gradient-text"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold font-jetbrains text-center mb-16 gradient-text"
           >
             Achievements & Recognition
           </motion.h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {achievements.map((achievement, index) => (
               <motion.div
                 key={achievement.title}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className="glass-strong p-6 rounded-xl text-center hover-lift"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.15 }}
+                className="card-glass p-8 text-center"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white mb-4">
                   {achievement.icon}
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{achievement.title}</h3>
-                <p className="text-sm text-gray-400">{achievement.description}</p>
+                <h3 className="text-lg font-bold mb-2">{achievement.title}</h3>
+                <p className="text-sm text-gray-500">{achievement.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="contact" className="py-20 px-6">
+      {/* Contact Section */}
+      <section id="contact" className="py-20 px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-4xl md:text-5xl font-bold font-space-grotesk mb-8 gradient-text"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold font-jetbrains mb-8 gradient-text"
           >
-            Let's Build Something Amazing
+            Let&apos;s Build Something Amazing
           </motion.h2>
           
           <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-xl mb-12 text-gray-400"
+            className="text-xl mb-12 text-gray-500"
           >
             Ready to leverage my versatile background from ECE to Computer Science? 
-            I'm available to join immediately, open to learning new skills, and excited about relocation opportunities!
+            I&apos;m available to join immediately, open to learning new skills, and excited about relocation opportunities!
           </motion.p>
           
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.4 }}
             className="grid md:grid-cols-3 gap-6 mb-12"
           >
-            <a href="mailto:karthiksaidham2001@gmail.com" 
-               className="glass-strong p-6 rounded-xl hover-lift group">
-              <Mail className="w-8 h-8 mb-3 text-blue-500 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-semibold mb-2">Email</h3>
-              <p className="text-gray-400">karthiksaidham2001@gmail.com</p>
+            <a href="mailto:karthiksaidham2001@gmail.com" className="contact-card group">
+              <Mail className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
+              <h3 className="text-lg font-bold mb-1">Email</h3>
+              <p className="text-gray-500 text-sm">karthiksaidham2001@gmail.com</p>
             </a>
             
-            <a href="tel:9375160692"
-               className="glass-strong p-6 rounded-xl hover-lift group">
-              <Phone className="w-8 h-8 mb-3 text-blue-500 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-semibold mb-2">Phone</h3>
-              <p className="text-gray-400">+1 (937) 516-0692</p>
+            <a href="tel:9375160692" className="contact-card group">
+              <Phone className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
+              <h3 className="text-lg font-bold mb-1">Phone</h3>
+              <p className="text-gray-500 text-sm">+1 (937) 516-0692</p>
             </a>
 
-            <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer"
-               className="glass-strong p-6 rounded-xl hover-lift group">
-              <Linkedin className="w-8 h-8 mb-3 text-blue-500 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-semibold mb-2">LinkedIn</h3>
-              <p className="text-gray-400">Let's Connect</p>
+            <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer" className="contact-card group">
+              <Linkedin className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
+              <h3 className="text-lg font-bold mb-1">LinkedIn</h3>
+              <p className="text-gray-500 text-sm">Let&apos;s Connect</p>
             </a>
           </motion.div>
           
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <a href="https://github.com/karthiksai109" target="_blank" rel="noopener noreferrer" 
-               className="btn-primary flex items-center justify-center gap-2">
-              <Github size={20} />
+            <a href="https://github.com/karthiksai109" target="_blank" rel="noopener noreferrer" className="btn-primary">
+              <Github className="w-5 h-5" />
               View GitHub
             </a>
-            <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer"
-               className="px-8 py-3 bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-              <Linkedin size={20} />
+            <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer" className="btn-secondary">
+              <Linkedin className="w-5 h-5" />
               LinkedIn
             </a>
           </motion.div>
         </div>
       </section>
 
-          </div>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8 px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="font-jetbrains text-sm">
+            &copy; 2024 Karthik Ramadugu | Built with passion and cutting-edge technology
+          </p>
+          <p className="text-gray-400 text-sm mt-2">
+            Full-Stack AI Engineer | Innovation Architect | Problem Solver
+          </p>
+        </div>
+      </footer>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 z-50 md:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <motion.div
+            initial={{ x: -300 }}
+            animate={{ x: 0 }}
+            className="fixed left-0 top-0 h-full w-64 bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-8">
+              <span className="text-xl font-bold font-jetbrains gradient-text">KR</span>
+              <button onClick={() => setIsMenuOpen(false)}>
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <nav className="space-y-4">
+              {['home', 'journey', 'skills', 'projects', 'achievements', 'contact'].map((section) => (
+                <a
+                  key={section}
+                  href={`#${section}`}
+                  className="block nav-link capitalize"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {section}
+                </a>
+              ))}
+            </nav>
+          </motion.div>
+        </motion.div>
+      )}
+    </div>
   )
 }
