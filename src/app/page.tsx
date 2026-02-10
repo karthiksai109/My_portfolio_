@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion, useScroll, useSpring } from 'framer-motion'
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { 
   Github, 
   Linkedin, 
@@ -12,8 +13,6 @@ import {
   Code, 
   Terminal, 
   Cpu, 
-  Cloud, 
-  Database, 
   ExternalLink, 
   MapPin, 
   GraduationCap, 
@@ -21,23 +20,89 @@ import {
   ChevronRight, 
   Zap, 
   Brain, 
-  Rocket, 
   Target, 
-  Gamepad2,
   Coffee,
-  Sparkles
+  Sparkles,
+  MessageSquare,
+  Send,
+  Bot,
+  Layers,
+  Swords,
+  Loader2,
+  ArrowRight
 } from 'lucide-react'
+
+interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+const AI_KNOWLEDGE_BASE: Record<string, string> = {
+  skills: "Karthik is proficient in React, Next.js, TypeScript, Node.js, Python, TensorFlow, MongoDB, AWS, Docker, and more. He specializes in full-stack development with AI/ML integration.",
+  experience: "Karthik transitioned from Electronics & Communication Engineering (ECE) to Computer Science, earning his MS from the University of Dayton. He has expertise in MERN stack, Python AI/ML, and cloud technologies.",
+  projects: "His key projects include an E-Commerce Analytics Platform (Next.js, TypeScript, Recharts) and this AI-powered portfolio itself. He builds real-time dashboards, intelligent systems, and modern web applications.",
+  education: "MS in Computer Science from University of Dayton (2024-2025), with advanced studies in AI, Machine Learning, and Distributed Systems. BTech in ECE (2018-2022).",
+  contact: "Email: karthiksaidham2001@gmail.com | Phone: +1 (937) 516-0692 | LinkedIn: linkedin.com/in/ramadugukarthik | GitHub: github.com/karthiksai109",
+  availability: "Karthik is immediately available for full-time positions. He is open to relocation anywhere in the US and excited about new challenges in AI and full-stack development.",
+  strengths: "His unique strength is bridging hardware (ECE) and software (CS) perspectives. He combines AI/ML expertise with production-grade full-stack development skills.",
+  hobbies: "Outside of coding, Karthik is a cricket enthusiast and a coffee connoisseur who loves exploring different brewing methods.",
+  ai: "Karthik has hands-on experience with TensorFlow, PyTorch, NLP, computer vision, and building AI-powered applications. This portfolio itself features an AI assistant built from scratch.",
+  hire: "Karthik is a perfect hire because he brings a rare combination: ECE hardware understanding + CS software mastery + AI/ML expertise + full-stack production skills. He learns fast, ships quality code, and is available immediately.",
+}
+
+function getAIResponse(query: string): string {
+  const q = query.toLowerCase()
+  
+  if (q.includes('skill') || q.includes('tech') || q.includes('stack') || q.includes('know') || q.includes('language')) {
+    return AI_KNOWLEDGE_BASE.skills
+  }
+  if (q.includes('experience') || q.includes('work') || q.includes('background') || q.includes('journey')) {
+    return AI_KNOWLEDGE_BASE.experience
+  }
+  if (q.includes('project') || q.includes('built') || q.includes('portfolio') || q.includes('build')) {
+    return AI_KNOWLEDGE_BASE.projects
+  }
+  if (q.includes('education') || q.includes('degree') || q.includes('university') || q.includes('study') || q.includes('college')) {
+    return AI_KNOWLEDGE_BASE.education
+  }
+  if (q.includes('contact') || q.includes('email') || q.includes('phone') || q.includes('reach') || q.includes('connect')) {
+    return AI_KNOWLEDGE_BASE.contact
+  }
+  if (q.includes('available') || q.includes('hire') || q.includes('join') || q.includes('start') || q.includes('when')) {
+    return AI_KNOWLEDGE_BASE.availability
+  }
+  if (q.includes('strength') || q.includes('unique') || q.includes('special') || q.includes('different') || q.includes('why')) {
+    return AI_KNOWLEDGE_BASE.strengths
+  }
+  if (q.includes('hobby') || q.includes('hobbies') || q.includes('fun') || q.includes('cricket') || q.includes('coffee')) {
+    return AI_KNOWLEDGE_BASE.hobbies
+  }
+  if (q.includes('ai') || q.includes('machine learning') || q.includes('ml') || q.includes('deep learning') || q.includes('tensorflow')) {
+    return AI_KNOWLEDGE_BASE.ai
+  }
+  if (q.includes('hire') || q.includes('perfect') || q.includes('fit') || q.includes('candidate') || q.includes('recruit')) {
+    return AI_KNOWLEDGE_BASE.hire
+  }
+  
+  return `Great question! Karthik is a Full-Stack AI Engineer with an MS in CS from the University of Dayton. He combines ECE hardware knowledge with cutting-edge software skills in React, Next.js, Python, and AI/ML. He's immediately available and open to relocation. Try asking about his skills, projects, experience, or why he'd be a great hire!`
+}
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [scrollY, setScrollY] = useState(0)
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    { role: 'assistant', content: "Hi! I'm Karthik's AI assistant. Ask me anything about his skills, projects, experience, or why he'd be a perfect hire!" }
+  ])
+  const [chatInput, setChatInput] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const chatEndRef = useRef<HTMLDivElement>(null)
   
   const containerRef = useRef(null)
   const { scrollYProgress } = useScroll()
-  const smoothScrollY = useSpring(scrollYProgress, { stiffness: 400, damping: 40 })
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 400, damping: 40 })
   
   const roles = [
     "Full-Stack AI Engineer",
@@ -50,68 +115,62 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!isDeleting && currentRoleIndex < roles.length - 1) {
-        setCurrentRoleIndex(prev => prev + 1)
-      } else if (isDeleting && currentRoleIndex > 0) {
-        setCurrentRoleIndex(prev => prev - 1)
-      } else if (!isDeleting && currentRoleIndex === roles.length - 1) {
-        setIsDeleting(true)
-      } else if (isDeleting && currentRoleIndex === 0) {
-        setIsDeleting(false)
-      }
+      setCurrentRoleIndex(prev => (prev + 1) % roles.length)
     }, 3000)
-
     return () => clearInterval(interval)
-  }, [currentRoleIndex, isDeleting])
+  }, [roles.length])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
     }
-    
     const handleScroll = () => {
       setScrollY(window.scrollY)
     }
-
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('scroll', handleScroll)
-    
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
-  const skills = [
-    { name: 'React/Next.js', level: 95, icon: <Code className="w-5 h-5" />, category: 'Frontend' },
-    { name: 'TypeScript', level: 90, icon: <Terminal className="w-5 h-5" />, category: 'Language' },
-    { name: 'Node.js', level: 88, icon: <Cpu className="w-5 h-5" />, category: 'Backend' },
-    { name: 'Python', level: 92, icon: <Brain className="w-5 h-5" />, category: 'AI/ML' },
-    { name: 'AWS/Cloud', level: 85, icon: <Cloud className="w-5 h-5" />, category: 'Cloud' },
-    { name: 'MongoDB', level: 87, icon: <Database className="w-5 h-5" />, category: 'Database' },
-  ]
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [chatMessages])
+
+  const handleSendMessage = () => {
+    if (!chatInput.trim()) return
+    const userMsg = chatInput.trim()
+    setChatInput('')
+    setChatMessages(prev => [...prev, { role: 'user', content: userMsg }])
+    setIsTyping(true)
+    
+    setTimeout(() => {
+      const response = getAIResponse(userMsg)
+      setChatMessages(prev => [...prev, { role: 'assistant', content: response }])
+      setIsTyping(false)
+    }, 800 + Math.random() * 700)
+  }
 
   const projects = [
     {
       title: "E-Commerce Analytics Platform",
-      description: "Real-time analytics dashboard with AI-powered insights for tracking sales, customer behavior, and inventory management.",
-      tech: ["Next.js", "TypeScript", "Recharts", "Tailwind"],
+      description: "Real-time analytics dashboard with AI-powered insights for tracking sales, customer behavior, and inventory management. Features interactive charts, product tables, and customer segmentation.",
+      tech: ["Next.js", "TypeScript", "Recharts", "Tailwind CSS", "React"],
       link: "https://github.com/karthiksai109/E-Commerce-Analytics-Platform",
-      featured: true
+      live: null,
+      featured: true,
+      color: "from-blue-500 to-purple-600"
     },
     {
-      title: "Premium Portfolio",
-      description: "Professional portfolio website with modern design, smooth animations, and optimized performance.",
-      tech: ["Next.js", "Framer Motion", "Tailwind CSS"],
-      link: "https://karthikramadugu.vercel.app/",
-      featured: false
-    },
-    {
-      title: "AI-Powered Chat Assistant",
-      description: "Intelligent chatbot with natural language processing and context-aware responses.",
-      tech: ["Python", "TensorFlow", "React", "Node.js"],
-      link: "#",
-      featured: false
+      title: "AI-Powered Portfolio",
+      description: "This portfolio itself - featuring an AI assistant, terminal-style UI, Framer Motion animations, and responsive design. Built to showcase full-stack + AI capabilities.",
+      tech: ["Next.js 14", "Framer Motion", "Tailwind CSS", "AI/NLP", "TypeScript"],
+      link: "https://github.com/karthiksai109/My_portfolio_",
+      live: "https://karthikramadugu.vercel.app/",
+      featured: true,
+      color: "from-emerald-500 to-cyan-600"
     }
   ]
 
@@ -152,47 +211,42 @@ export default function Home() {
     { title: "Open Source Contributor", description: "Active GitHub community participant", icon: <Github className="w-5 h-5" /> }
   ]
 
+  const navSections = ['home', 'journey', 'projects', 'achievements', 'contact']
+
   return (
     <div ref={containerRef} className="min-h-screen bg-white text-gray-900 overflow-hidden">
-      {/* Advanced Mouse Follower */}
+      {/* Scroll Progress Bar */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 z-50 origin-left"
+        style={{ scaleX: smoothProgress }}
+      />
+
+      {/* Mouse Follower */}
       <div 
-        className="fixed w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-screen"
+        className="fixed w-8 h-8 rounded-full pointer-events-none z-50 mix-blend-screen transition-transform duration-75"
         style={{
-          background: 'radial-gradient(circle, rgba(0,102,255,0.3) 0%, transparent 70%)',
-          left: mousePosition.x - 12,
-          top: mousePosition.y - 12,
-          transform: 'translate(0, 0)',
+          background: 'radial-gradient(circle, rgba(0,102,255,0.25) 0%, transparent 70%)',
+          left: mousePosition.x - 16,
+          top: mousePosition.y - 16,
         }}
       />
       
       {/* Dynamic Background */}
       <div className="fixed inset-0 bg-grid-pattern opacity-30" />
       <div 
-        className="fixed inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50"
-        style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
+        className="fixed inset-0 bg-gradient-to-br from-blue-50/40 via-transparent to-purple-50/40"
+        style={{ transform: `translateY(${scrollY * 0.3}px)` }}
       />
 
-      {/* Floating Elements */}
+      {/* Floating Particles */}
       <div className="fixed inset-0 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-20"
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${10 + i * 12}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 0.5, 0.2],
-            }}
-            transition={{
-              duration: 3 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            className="absolute w-1.5 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-20"
+            style={{ left: `${10 + i * 12}%`, top: `${8 + i * 10}%` }}
+            animate={{ y: [0, -25, 0], opacity: [0.15, 0.4, 0.15] }}
+            transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
           />
         ))}
       </div>
@@ -200,39 +254,44 @@ export default function Home() {
       {/* Navigation */}
       <motion.nav 
         className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
-        style={{
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-        }}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <motion.div 
-              className="text-2xl font-bold font-space-grotesk gradient-text-blue cursor-pointer"
+            <motion.a 
+              href="#home"
+              className="text-xl font-bold font-jetbrains terminal-prompt cursor-pointer"
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
             >
-              <span className="terminal-prompt">karthik@dev</span>
-            </motion.div>
+              karthik@dev
+            </motion.a>
             
-            <div className="hidden md:flex items-center gap-2">
-              {['home', 'journey', 'skills', 'projects', 'achievements', 'contact'].map((section, index) => (
+            <div className="hidden md:flex items-center gap-1">
+              {navSections.map((section, index) => (
                 <motion.a
                   key={section}
                   href={`#${section}`}
-                  className="nav-link capitalize relative group"
+                  className="nav-link capitalize"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
                 >
                   {section}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.a>
               ))}
+              <motion.button
+                onClick={() => setIsChatOpen(true)}
+                className="ml-2 nav-link flex items-center gap-2 text-purple-600 hover:text-purple-700"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Bot className="w-4 h-4" />
+                AI Assistant
+              </motion.button>
             </div>
 
             <motion.button
@@ -247,221 +306,208 @@ export default function Home() {
         </div>
       </motion.nav>
 
-      {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-24">
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
+      {/* ===== HERO SECTION ===== */}
+      <section id="home" className="relative min-h-screen flex items-center px-6 pt-24">
+        <div className="absolute inset-0 opacity-8">
           <div className="absolute inset-0 bg-dots-pattern" />
         </div>
         
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="text-center z-10 max-w-6xl relative"
-        >
-          {/* Floating Status Cards */}
-          <motion.div 
-            className="mb-12 flex flex-wrap gap-6 justify-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+        <div className="max-w-7xl mx-auto w-full z-10">
+          <div className="grid lg:grid-cols-5 gap-12 items-center">
+            {/* Left Content - 3 cols */}
             <motion.div 
-              className="status-badge status-available floating"
-              style={{ animationDelay: '0s' }}
-              whileHover={{ scale: 1.05, rotate: [0, 1, -1, 0] }}
+              className="lg:col-span-3"
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-              <span className="font-jetbrains">Available for Full-time</span>
-            </motion.div>
-            
-            <motion.div 
-              className="status-badge status-ready floating"
-              style={{ animationDelay: '0.5s' }}
-              whileHover={{ scale: 1.05, rotate: [0, 1, -1, 0] }}
-            >
-              <Zap className="w-4 h-4" />
-              <span className="font-jetbrains">Ready to Deploy</span>
-            </motion.div>
-            
-            <motion.div 
-              className="status-badge status-open floating"
-              style={{ animationDelay: '1s' }}
-              whileHover={{ scale: 1.05, rotate: [0, 1, -1, 0] }}
-            >
-              <MapPin className="w-4 h-4" />
-              <span className="font-jetbrains">Open to Relocation</span>
-            </motion.div>
-          </motion.div>
+              {/* Status Badges */}
+              <div className="mb-8 flex flex-wrap gap-3">
+                <motion.div className="status-badge status-available" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                  <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                  <span className="font-jetbrains">Available Now</span>
+                </motion.div>
+                <motion.div className="status-badge status-ready" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                  <Zap className="w-3.5 h-3.5" />
+                  <span className="font-jetbrains">Ready to Deploy</span>
+                </motion.div>
+                <motion.div className="status-badge status-open" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span className="font-jetbrains">Open to Relocation</span>
+                </motion.div>
+              </div>
 
-          {/* Main Terminal Display */}
-          <motion.div 
-            className="card-gradient p-8 md:p-12 mb-8 relative overflow-hidden"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-          >
-            {/* Terminal Header */}
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="ml-4 text-sm font-jetbrains text-gray-500">karthik@portfolio:~</span>
-            </div>
-            
-            {/* Terminal Content */}
-            <motion.div className="text-left">
-              <div className="font-jetbrains text-lg mb-4">
-                <span className="terminal-prompt">$</span> 
-                <span className="ml-2">whoami</span>
-              </div>
-              
-              <motion.h1 
-                className="text-4xl md:text-7xl font-bold font-jetbrains mb-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-              >
-                <span className="terminal-text">Karthik Ramadugu</span>
-                <span className="terminal-cursor"></span>
-              </motion.h1>
-              
-              <div className="font-jetbrains text-lg mb-4">
-                <span className="terminal-prompt">$</span> 
-                <span className="ml-2">cat current_role.txt</span>
-              </div>
-              
+              {/* Terminal Card */}
               <motion.div 
-                className="text-3xl md:text-5xl font-bold font-jetbrains gradient-text-blue mb-6"
-                key={currentRoleIndex}
+                className="card-gradient p-6 md:p-10 mb-8"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              >
+                <div className="flex items-center gap-2 mb-5">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <span className="ml-3 text-xs font-jetbrains text-gray-400">karthik@portfolio:~</span>
+                </div>
+                
+                <div className="text-left space-y-3">
+                  <div className="font-jetbrains text-sm text-gray-500">
+                    <span className="terminal-prompt">$</span> <span>whoami</span>
+                  </div>
+                  <h1 className="text-3xl md:text-6xl font-bold font-jetbrains">
+                    <span className="terminal-text">Karthik Ramadugu</span>
+                    <span className="terminal-cursor"></span>
+                  </h1>
+                  
+                  <div className="font-jetbrains text-sm text-gray-500">
+                    <span className="terminal-prompt">$</span> <span>cat role.txt</span>
+                  </div>
+                  <motion.div 
+                    className="text-2xl md:text-4xl font-bold font-jetbrains gradient-text-blue"
+                    key={currentRoleIndex}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {roles[currentRoleIndex]}
+                  </motion.div>
+                  
+                  <p className="text-base md:text-lg text-gray-600 font-jetbrains leading-relaxed pt-2">
+                    From <span className="gradient-text-coffee font-semibold">ECE foundations</span> to 
+                    <span className="gradient-text-blue font-semibold"> AI innovation</span>. 
+                    Mastered <span className="gradient-text-cyan font-semibold">Python</span> to 
+                    <span className="gradient-text-blue font-semibold"> MERN stack</span>. 
+                    <span className="terminal-text font-semibold"> Building cutting-edge solutions!</span>
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Action Buttons */}
+              <motion.div 
+                className="flex flex-wrap gap-4 mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ delay: 1 }}
               >
-                {roles[currentRoleIndex]}
-                <span className="terminal-cursor"></span>
+                <motion.a href="#contact" className="btn-primary group" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+                  <Terminal className="w-5 h-5" />
+                  <span>Deploy Karthik</span>
+                  <Sparkles className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.a>
+                
+                <motion.a href="#projects" className="btn-secondary group" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+                  <Layers className="w-5 h-5" />
+                  <span>View Projects</span>
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                </motion.a>
+                
+                <motion.a href="/game" className="btn-challenge group" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+                  <Swords className="w-5 h-5" />
+                  <span>Challenge Me</span>
+                </motion.a>
               </motion.div>
-              
-              <div className="font-jetbrains text-lg mb-6">
-                <span className="terminal-prompt">$</span> 
-                <span className="ml-2">echo "$description"</span>
-              </div>
-              
-              <motion.p 
-                className="text-lg md:text-xl text-gray-600 font-jetbrains leading-relaxed max-w-4xl"
+
+              {/* Social Links */}
+              <motion.div 
+                className="flex gap-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2 }}
               >
-                From <span className="gradient-text-coffee font-semibold">ECE foundations</span> to 
-                <span className="gradient-text-blue font-semibold"> AI innovation excellence</span>. 
-                Mastered <span className="gradient-text-cyan font-semibold">Python</span> to 
-                <span className="gradient-text-blue font-semibold">MERN stack</span> development. 
-                <span className="terminal-text font-semibold"> Always building cutting-edge solutions</span> 
-                that transform ideas into reality!
-              </motion.p>
+                {[
+                  { href: "https://github.com/karthiksai109", icon: Github, label: "GitHub" },
+                  { href: "https://www.linkedin.com/in/ramadugukarthik/", icon: Linkedin, label: "LinkedIn" },
+                  { href: "mailto:karthiksaidham2001@gmail.com", icon: Mail, label: "Email" }
+                ].map((social) => (
+                  <motion.a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-xl card-glass hover:border-blue-300 transition-all group"
+                    whileHover={{ scale: 1.1, y: -3 }}
+                    title={social.label}
+                  >
+                    <social.icon className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                  </motion.a>
+                ))}
+              </motion.div>
             </motion.div>
-            
-            {/* Coffee & Cricket Personal Touch */}
-            <div className="absolute top-4 right-4 flex gap-3">
-              <motion.div 
-                className="p-2 rounded-lg bg-gradient-to-r from-amber-100 to-amber-200"
-                whileHover={{ scale: 1.1, rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Coffee className="w-5 h-5 text-amber-700" />
-              </motion.div>
-              <motion.div 
-                className="p-2 rounded-lg bg-gradient-to-r from-green-100 to-green-200"
-                whileHover={{ scale: 1.1, rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Target className="w-5 h-5 text-green-700" />
-              </motion.div>
-            </div>
-          </motion.div>
 
-          {/* Interactive Command Buttons */}
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-6 justify-center mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4 }}
-          >
-            <motion.a 
-              href="#contact" 
-              className="btn-primary group"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            {/* Right - Photo + Personal Touch - 2 cols */}
+            <motion.div 
+              className="lg:col-span-2 flex flex-col items-center"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <Terminal className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-              <span>Deploy Karthik</span>
-              <Sparkles className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </motion.a>
-            
-            <motion.a 
-              href="#projects" 
-              className="btn-secondary group"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Rocket className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              <span>View Projects</span>
-              <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-            </motion.a>
-            
-            <motion.a 
-              href="/game" 
-              className="btn-ghost group border-2 border-dashed border-gray-300 hover:border-primary-blue"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Gamepad2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-              <span>Challenge Me</span>
-            </motion.a>
-          </motion.div>
+              <div className="relative">
+                {/* Gradient Ring */}
+                <div className="absolute -inset-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-20 blur-lg animate-pulse" />
+                <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                  <Image
+                    src="/photos/karthik_2_.jpeg"
+                    alt="Karthik Ramadugu"
+                    fill
+                    className="object-cover object-top"
+                    priority
+                  />
+                </div>
+                {/* Coffee badge */}
+                <motion.div 
+                  className="absolute -bottom-2 -left-2 p-3 rounded-full bg-white shadow-lg border border-amber-200"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <Coffee className="w-6 h-6 text-amber-600" />
+                </motion.div>
+                {/* AI badge */}
+                <motion.div 
+                  className="absolute -bottom-2 -right-2 p-3 rounded-full bg-white shadow-lg border border-purple-200"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+                >
+                  <Brain className="w-6 h-6 text-purple-600" />
+                </motion.div>
+                {/* Sparkle badge */}
+                <motion.div 
+                  className="absolute -top-2 right-4 p-3 rounded-full bg-white shadow-lg border border-blue-200"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 0.8 }}
+                >
+                  <Sparkles className="w-6 h-6 text-blue-600" />
+                </motion.div>
+              </div>
 
-          {/* Social Links with Advanced Hover */}
-          <motion.div 
-            className="flex gap-6 justify-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.6 }}
-          >
-            {[
-              { href: "https://github.com/karthiksai109", icon: Github, label: "GitHub" },
-              { href: "https://www.linkedin.com/in/ramadugukarthik/", icon: Linkedin, label: "LinkedIn" },
-              { href: "mailto:karthiksaidham2001@gmail.com", icon: Mail, label: "Email" }
-            ].map((social, index) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <div className="p-4 rounded-2xl card-glass relative overflow-hidden">
-                  <social.icon className="w-6 h-6 relative z-10" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <social.icon className="w-6 h-6 absolute inset-0 m-auto text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  {social.label}
-                </div>
-              </motion.a>
-            ))}
-          </motion.div>
-        </motion.div>
+              {/* Quick Stats */}
+              <div className="mt-8 grid grid-cols-3 gap-4 w-full max-w-sm">
+                {[
+                  { label: "Projects", value: "10+" },
+                  { label: "Tech Stack", value: "15+" },
+                  { label: "Experience", value: "3+ yrs" }
+                ].map((stat, i) => (
+                  <motion.div 
+                    key={stat.label}
+                    className="text-center p-3 rounded-xl bg-white/80 border border-gray-100 shadow-sm"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1 + i * 0.1 }}
+                  >
+                    <div className="text-xl font-bold font-jetbrains gradient-text-blue">{stat.value}</div>
+                    <div className="text-xs text-gray-500 font-jetbrains">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
         
         {/* Scroll Indicator */}
         <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, 10, 0] }}
-          transition={{ delay: 2, duration: 2, repeat: Infinity }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
         >
           <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-gray-300 rounded-full mt-2" />
@@ -469,7 +515,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Journey Section */}
+      {/* ===== JOURNEY SECTION ===== */}
       <section id="journey" className="py-20 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <motion.h2
@@ -482,27 +528,30 @@ export default function Home() {
           </motion.h2>
           
           <div className="relative">
-            <div className="timeline-line"></div>
+            <div className="timeline-line" />
             <div className="space-y-12">
               {journey.map((item, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
-                  className="relative pl-12"
+                  transition={{ delay: index * 0.15 }}
+                  className="relative pl-16"
                 >
-                  <div className="timeline-dot"></div>
-                  <div className="pro-card p-6">
+                  <div className="timeline-dot" />
+                  <div className="card-glass p-6">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                      <div className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shrink-0">
                         {item.icon}
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-xl font-bold">{item.title}</h3>
+                          <span className="text-xs font-jetbrains px-2 py-1 rounded-full bg-blue-50 text-blue-600">{item.type}</span>
+                        </div>
                         <p className="text-gray-600 mb-2">{item.description}</p>
-                        <span className="text-sm font-jetbrains text-primary-blue">{item.year}</span>
+                        <span className="text-sm font-jetbrains gradient-text-blue font-semibold">{item.year}</span>
                       </div>
                     </div>
                   </div>
@@ -513,106 +562,83 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-20 px-6">
+      {/* ===== PROJECTS SECTION ===== */}
+      <section id="projects" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold font-jetbrains text-center mb-16 gradient-text"
-          >
-            Technical Arsenal
-          </motion.h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {skills.map((skill, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="pro-card p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-                      {skill.icon}
-                    </div>
-                    <div>
-                      <h3 className="font-bold">{skill.name}</h3>
-                      <span className="text-sm text-gray-500 font-jetbrains">{skill.category}</span>
-                    </div>
-                  </div>
-                  <span className="text-2xl font-bold font-jetbrains text-primary-blue">{skill.level}%</span>
-                </div>
-                <div className="skill-bar">
-                  <div 
-                    className="skill-progress"
-                    style={{ width: `${skill.level}%` }}
-                  ></div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="py-20 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold font-jetbrains text-center mb-16 gradient-text"
+            className="text-4xl md:text-5xl font-bold font-jetbrains text-center mb-6 gradient-text"
           >
             Featured Projects
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center text-gray-500 font-jetbrains mb-16 text-sm"
+          >
+            Only live & working projects — no placeholders
+          </motion.p>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className={`pro-card p-6 ${project.featured ? 'md:col-span-2 lg:col-span-1' : ''}`}
+                className="card-glass p-8 group"
               >
-                {project.featured && (
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold font-jetbrains mb-4">
-                    <Zap className="w-3 h-3" />
-                    FEATURED
-                  </div>
-                )}
-                <h3 className="text-xl font-bold mb-3">{project.title}</h3>
-                <p className="text-gray-600 mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
+                {/* Project Header */}
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r ${project.color} text-white text-xs font-bold font-jetbrains mb-5`}>
+                  <Zap className="w-3 h-3" />
+                  FEATURED
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-3 group-hover:gradient-text-blue transition-all">{project.title}</h3>
+                <p className="text-gray-600 mb-5 leading-relaxed">{project.description}</p>
+                
+                {/* Tech Tags */}
+                <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((tech, techIndex) => (
-                    <span key={techIndex} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-jetbrains">
+                    <span key={techIndex} className="px-3 py-1.5 bg-gray-50 text-gray-700 rounded-lg text-xs font-jetbrains border border-gray-100">
                       {tech}
                     </span>
                   ))}
                 </div>
-                <a 
-                  href={project.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary-blue hover:text-ninja-purple transition-colors font-jetbrains font-medium"
-                >
-                  View Project <ExternalLink className="w-4 h-4" />
-                </a>
+                
+                {/* Links */}
+                <div className="flex gap-4">
+                  <a 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-jetbrains font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                  >
+                    <Github className="w-4 h-4" /> Source Code
+                  </a>
+                  {project.live && (
+                    <a 
+                      href={project.live} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-jetbrains font-semibold text-blue-600 hover:text-purple-600 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" /> Live Demo
+                    </a>
+                  )}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      
-      {/* Achievements Section */}
-      <section id="achievements" className="py-20 px-6">
+      {/* ===== ACHIEVEMENTS SECTION ===== */}
+      <section id="achievements" className="py-20 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -620,7 +646,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold font-jetbrains text-center mb-16 gradient-text"
           >
-            Achievements & Recognition
+            Achievements
           </motion.h2>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -633,7 +659,7 @@ export default function Home() {
                 transition={{ delay: index * 0.15 }}
                 className="card-glass p-8 text-center"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white mb-5">
                   {achievement.icon}
                 </div>
                 <h3 className="text-lg font-bold mb-2">{achievement.title}</h3>
@@ -644,14 +670,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 bg-gray-50">
+      {/* ===== CONTACT SECTION ===== */}
+      <section id="contact" className="py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold font-jetbrains mb-8 gradient-text"
+            className="text-4xl md:text-5xl font-bold font-jetbrains mb-6 gradient-text"
           >
             Let&apos;s Build Something Amazing
           </motion.h2>
@@ -661,10 +687,9 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-xl mb-12 text-gray-500"
+            className="text-lg mb-12 text-gray-500 max-w-2xl mx-auto"
           >
-            Ready to leverage my versatile background from ECE to Computer Science? 
-            I&apos;m available to join immediately, open to learning new skills, and excited about relocation opportunities!
+            Available immediately for full-time roles. Open to relocation and excited about new challenges in AI and full-stack development.
           </motion.p>
           
           <motion.div
@@ -679,13 +704,11 @@ export default function Home() {
               <h3 className="text-lg font-bold mb-1">Email</h3>
               <p className="text-gray-500 text-sm">karthiksaidham2001@gmail.com</p>
             </a>
-            
             <a href="tel:9375160692" className="contact-card group">
               <Phone className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
               <h3 className="text-lg font-bold mb-1">Phone</h3>
               <p className="text-gray-500 text-sm">+1 (937) 516-0692</p>
             </a>
-
             <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer" className="contact-card group">
               <Linkedin className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
               <h3 className="text-lg font-bold mb-1">LinkedIn</h3>
@@ -701,12 +724,10 @@ export default function Home() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <a href="https://github.com/karthiksai109" target="_blank" rel="noopener noreferrer" className="btn-primary">
-              <Github className="w-5 h-5" />
-              View GitHub
+              <Github className="w-5 h-5" /> View GitHub
             </a>
             <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              <Linkedin className="w-5 h-5" />
-              LinkedIn
+              <Linkedin className="w-5 h-5" /> LinkedIn
             </a>
           </motion.div>
         </div>
@@ -715,50 +736,167 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 px-6">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="font-jetbrains text-sm">
-            &copy; 2024 Karthik Ramadugu | Built with passion and cutting-edge technology
-          </p>
-          <p className="text-gray-400 text-sm mt-2">
-            Full-Stack AI Engineer | Innovation Architect | Problem Solver
-          </p>
+          <p className="font-jetbrains text-sm">&copy; 2025 Karthik Ramadugu</p>
+          <p className="text-gray-400 text-xs mt-2 font-jetbrains">Full-Stack AI Engineer | Built with Next.js, Framer Motion & AI</p>
         </div>
       </footer>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 z-50 md:hidden"
-          onClick={() => setIsMenuOpen(false)}
-        >
+      {/* ===== AI ASSISTANT FLOATING BUTTON ===== */}
+      <motion.button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl hover:shadow-blue-500/25"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        animate={{ y: [0, -5, 0] }}
+        transition={{ y: { duration: 2, repeat: Infinity } }}
+      >
+        <Bot className="w-6 h-6" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white" />
+      </motion.button>
+
+      {/* ===== AI CHAT MODAL ===== */}
+      <AnimatePresence>
+        {isChatOpen && (
           <motion.div
-            initial={{ x: -300 }}
-            animate={{ x: 0 }}
-            className="fixed left-0 top-0 h-full w-64 bg-white p-6 shadow-xl"
-            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
           >
-            <div className="flex justify-between items-center mb-8">
-              <span className="text-xl font-bold font-jetbrains gradient-text">KR</span>
-              <button onClick={() => setIsMenuOpen(false)}>
-                <X className="w-6 h-6" />
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-white/20 rounded-lg">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold font-jetbrains text-sm">Karthik&apos;s AI Assistant</h3>
+                  <p className="text-xs text-blue-100">Powered by custom NLP</p>
+                </div>
+              </div>
+              <button onClick={() => setIsChatOpen(false)} className="p-1 hover:bg-white/20 rounded-lg transition-colors">
+                <X className="w-5 h-5" />
               </button>
             </div>
-            <nav className="space-y-4">
-              {['home', 'journey', 'skills', 'projects', 'achievements', 'contact'].map((section) => (
-                <a
-                  key={section}
-                  href={`#${section}`}
-                  className="block nav-link capitalize"
-                  onClick={() => setIsMenuOpen(false)}
+
+            {/* Chat Messages */}
+            <div className="h-80 overflow-y-auto p-4 space-y-4 bg-gray-50">
+              {chatMessages.map((msg, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  {section}
-                </a>
+                  <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
+                    msg.role === 'user' 
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-br-md' 
+                      : 'bg-white border border-gray-200 text-gray-700 rounded-bl-md shadow-sm'
+                  }`}>
+                    {msg.content}
+                  </div>
+                </motion.div>
               ))}
-            </nav>
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-md shadow-sm">
+                    <div className="flex gap-1.5">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Quick Questions */}
+            <div className="px-4 py-2 border-t border-gray-100 bg-white">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {['Skills?', 'Projects?', 'Why hire?', 'Contact?'].map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => { setChatInput(q); }}
+                    className="shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors font-jetbrains"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-3 border-t border-gray-100 bg-white">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Ask about Karthik..."
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm font-jetbrains focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                />
+                <motion.button
+                  onClick={handleSendMessage}
+                  className="p-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white disabled:opacity-50"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={!chatInput.trim() || isTyping}
+                >
+                  {isTyping ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                </motion.button>
+              </div>
+            </div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 md:hidden"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <motion.div
+              initial={{ x: -300 }}
+              animate={{ x: 0 }}
+              exit={{ x: -300 }}
+              className="fixed left-0 top-0 h-full w-72 bg-white p-6 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-8">
+                <span className="text-xl font-bold font-jetbrains gradient-text">KR</span>
+                <button onClick={() => setIsMenuOpen(false)}>
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <nav className="space-y-2">
+                {navSections.map((section) => (
+                  <a
+                    key={section}
+                    href={`#${section}`}
+                    className="block nav-link capitalize py-3"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {section}
+                  </a>
+                ))}
+                <button
+                  onClick={() => { setIsMenuOpen(false); setIsChatOpen(true); }}
+                  className="w-full text-left nav-link py-3 flex items-center gap-2 text-purple-600"
+                >
+                  <Bot className="w-4 h-4" /> AI Assistant
+                </button>
+              </nav>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
