@@ -7,7 +7,6 @@ import {
   Github, 
   Linkedin, 
   Mail, 
-  Phone, 
   Menu, 
   X, 
   Code, 
@@ -42,7 +41,7 @@ const AI_KNOWLEDGE_BASE: Record<string, string> = {
   experience: "Karthik transitioned from Electronics & Communication Engineering (ECE) to Computer Science, earning his MS from the University of Dayton. He has expertise in MERN stack, Python AI/ML, and cloud technologies.",
   projects: "His key projects include an E-Commerce Analytics Platform (Next.js, TypeScript, Recharts) and this AI-powered portfolio itself. He builds real-time dashboards, intelligent systems, and modern web applications.",
   education: "MS in Computer Science from University of Dayton (2024-2025), with advanced studies in AI, Machine Learning, and Distributed Systems. BTech in ECE (2018-2022).",
-  contact: "Email: karthiksaidham2001@gmail.com | Phone: +1 (937) 516-0692 | LinkedIn: linkedin.com/in/ramadugukarthik | GitHub: github.com/karthiksai109",
+  contact: "Email: karthiksaidham2001@gmail.com | LinkedIn: linkedin.com/in/ramadugukarthik | GitHub: github.com/karthiksai109",
   availability: "Karthik is immediately available for full-time positions. He is open to relocation anywhere in the US and excited about new challenges in AI and full-stack development.",
   strengths: "His unique strength is bridging hardware (ECE) and software (CS) perspectives. He combines AI/ML expertise with production-grade full-stack development skills.",
   hobbies: "Outside of coding, Karthik is a cricket enthusiast and a coffee connoisseur who loves exploring different brewing methods.",
@@ -84,7 +83,7 @@ function getAIResponse(query: string): string {
     return AI_KNOWLEDGE_BASE.hire
   }
   
-  return `Great question! Karthik is a Full-Stack AI Engineer with an MS in CS from the University of Dayton. He combines ECE hardware knowledge with cutting-edge software skills in React, Next.js, Python, and AI/ML. He's immediately available and open to relocation. Try asking about his skills, projects, experience, or why he'd be a great hire!`
+  return `Karthik is a Full-Stack AI Engineer with an MS in CS from the University of Dayton. He bridges ECE hardware knowledge with cutting-edge software skills in React, Next.js, Python, and AI/ML. His adaptability and problem-solving mindset make him stand out. He's immediately available and open to relocation. Try asking about his skills, projects, experience, or why he'd be a great hire!`
 }
 
 export default function Home() {
@@ -161,7 +160,7 @@ export default function Home() {
       link: "https://github.com/karthiksai109/E-Commerce-Analytics-Platform",
       live: null,
       featured: true,
-      color: "from-blue-500 to-purple-600"
+      color: "from-[#1d4ed8] to-[#0e7490]"
     },
     {
       title: "AI-Powered Portfolio",
@@ -170,7 +169,7 @@ export default function Home() {
       link: "https://github.com/karthiksai109/My_portfolio_",
       live: "https://karthikramadugu.vercel.app/",
       featured: true,
-      color: "from-emerald-500 to-cyan-600"
+      color: "from-[#15803d] to-[#0e7490]"
     }
   ]
 
@@ -214,10 +213,10 @@ export default function Home() {
   const navSections = ['home', 'journey', 'projects', 'achievements', 'contact']
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-white text-gray-900 overflow-hidden">
+    <div ref={containerRef} className="min-h-screen bg-white text-[#1a1a2e] overflow-hidden">
       {/* Scroll Progress Bar */}
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1d4ed8] via-[#6d28d9] to-[#0e7490] z-50 origin-left"
         style={{ scaleX: smoothProgress }}
       />
 
@@ -225,7 +224,7 @@ export default function Home() {
       <div 
         className="fixed w-8 h-8 rounded-full pointer-events-none z-50 mix-blend-screen transition-transform duration-75"
         style={{
-          background: 'radial-gradient(circle, rgba(0,102,255,0.25) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(37,99,235,0.2) 0%, transparent 70%)',
           left: mousePosition.x - 16,
           top: mousePosition.y - 16,
         }}
@@ -234,7 +233,7 @@ export default function Home() {
       {/* Dynamic Background */}
       <div className="fixed inset-0 bg-grid-pattern opacity-30" />
       <div 
-        className="fixed inset-0 bg-gradient-to-br from-blue-50/40 via-transparent to-purple-50/40"
+        className="fixed inset-0 bg-gradient-to-br from-[#2563eb]/5 via-transparent to-[#6d28d9]/5"
         style={{ transform: `translateY(${scrollY * 0.3}px)` }}
       />
 
@@ -243,7 +242,7 @@ export default function Home() {
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1.5 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-20"
+            className="absolute w-1.5 h-1.5 bg-gradient-to-r from-[#2563eb] to-[#6d28d9] rounded-full opacity-15"
             style={{ left: `${10 + i * 12}%`, top: `${8 + i * 10}%` }}
             animate={{ y: [0, -25, 0], opacity: [0.15, 0.4, 0.15] }}
             transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
@@ -253,7 +252,7 @@ export default function Home() {
 
       {/* Navigation */}
       <motion.nav 
-        className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
+        className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl border-b border-[#e4e4ec]/50"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -283,7 +282,7 @@ export default function Home() {
               ))}
               <motion.button
                 onClick={() => setIsChatOpen(true)}
-                className="ml-2 nav-link flex items-center gap-2 text-purple-600 hover:text-purple-700"
+                className="ml-2 nav-link flex items-center gap-2 text-[#6d28d9] hover:text-[#1d4ed8]"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
@@ -324,7 +323,7 @@ export default function Home() {
               {/* Status Badges */}
               <div className="mb-8 flex flex-wrap gap-3">
                 <motion.div className="status-badge status-available" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                  <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                  <div className="w-2.5 h-2.5 bg-[#15803d] rounded-full animate-pulse" />
                   <span className="font-jetbrains">Available Now</span>
                 </motion.div>
                 <motion.div className="status-badge status-ready" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
@@ -345,14 +344,14 @@ export default function Home() {
                 transition={{ delay: 0.5, duration: 0.8 }}
               >
                 <div className="flex items-center gap-2 mb-5">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="ml-3 text-xs font-jetbrains text-gray-400">karthik@portfolio:~</span>
+                  <div className="w-3 h-3 rounded-full bg-[#c2410c]" />
+                  <div className="w-3 h-3 rounded-full bg-[#a16207]" />
+                  <div className="w-3 h-3 rounded-full bg-[#15803d]" />
+                  <span className="ml-3 text-xs font-jetbrains text-[#8888a4]">karthik@portfolio:~</span>
                 </div>
                 
                 <div className="text-left space-y-3">
-                  <div className="font-jetbrains text-sm text-gray-500">
+                  <div className="font-jetbrains text-sm text-[#8888a4]">
                     <span className="terminal-prompt">$</span> <span>whoami</span>
                   </div>
                   <h1 className="text-3xl md:text-6xl font-bold font-jetbrains">
@@ -360,7 +359,7 @@ export default function Home() {
                     <span className="terminal-cursor"></span>
                   </h1>
                   
-                  <div className="font-jetbrains text-sm text-gray-500">
+                  <div className="font-jetbrains text-sm text-[#8888a4]">
                     <span className="terminal-prompt">$</span> <span>cat role.txt</span>
                   </div>
                   <motion.div 
@@ -373,12 +372,12 @@ export default function Home() {
                     {roles[currentRoleIndex]}
                   </motion.div>
                   
-                  <p className="text-base md:text-lg text-gray-600 font-jetbrains leading-relaxed pt-2">
+                  <p className="text-base md:text-lg text-[#4a4a68] font-jetbrains leading-relaxed pt-2">
                     From <span className="gradient-text-coffee font-semibold">ECE foundations</span> to 
                     <span className="gradient-text-blue font-semibold"> AI innovation</span>. 
                     Mastered <span className="gradient-text-cyan font-semibold">Python</span> to 
                     <span className="gradient-text-blue font-semibold"> MERN stack</span>. 
-                    <span className="terminal-text font-semibold"> Building cutting-edge solutions!</span>
+                    <span className="terminal-text font-semibold"> Adaptable, hardworking, always solving real problems.</span>
                   </p>
                 </div>
               </motion.div>
@@ -425,11 +424,11 @@ export default function Home() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 rounded-xl card-glass hover:border-blue-300 transition-all group"
+                    className="p-3 rounded-xl card-glass hover:border-[#2563eb]/30 transition-all group"
                     whileHover={{ scale: 1.1, y: -3 }}
                     title={social.label}
                   >
-                    <social.icon className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                    <social.icon className="w-5 h-5 text-[#4a4a68] group-hover:text-[#2563eb] transition-colors" />
                   </motion.a>
                 ))}
               </motion.div>
@@ -444,7 +443,7 @@ export default function Home() {
             >
               <div className="relative">
                 {/* Gradient Ring */}
-                <div className="absolute -inset-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-20 blur-lg animate-pulse" />
+                <div className="absolute -inset-3 bg-gradient-to-r from-[#1d4ed8] via-[#6d28d9] to-[#0e7490] rounded-full opacity-20 blur-lg animate-pulse" />
                 <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-2xl">
                   <Image
                     src="/photos/karthik_2_.jpeg"
@@ -456,27 +455,27 @@ export default function Home() {
                 </div>
                 {/* Coffee badge */}
                 <motion.div 
-                  className="absolute -bottom-2 -left-2 p-3 rounded-full bg-white shadow-lg border border-amber-200"
+                  className="absolute -bottom-2 -left-2 p-3 rounded-full bg-white shadow-lg border border-[#a16207]/20"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 >
-                  <Coffee className="w-6 h-6 text-amber-600" />
+                  <Coffee className="w-6 h-6 text-[#a16207]" />
                 </motion.div>
                 {/* AI badge */}
                 <motion.div 
-                  className="absolute -bottom-2 -right-2 p-3 rounded-full bg-white shadow-lg border border-purple-200"
+                  className="absolute -bottom-2 -right-2 p-3 rounded-full bg-white shadow-lg border border-[#6d28d9]/20"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
                 >
-                  <Brain className="w-6 h-6 text-purple-600" />
+                  <Brain className="w-6 h-6 text-[#6d28d9]" />
                 </motion.div>
                 {/* Sparkle badge */}
                 <motion.div 
-                  className="absolute -top-2 right-4 p-3 rounded-full bg-white shadow-lg border border-blue-200"
+                  className="absolute -top-2 right-4 p-3 rounded-full bg-white shadow-lg border border-[#2563eb]/20"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 3, repeat: Infinity, delay: 0.8 }}
                 >
-                  <Sparkles className="w-6 h-6 text-blue-600" />
+                  <Sparkles className="w-6 h-6 text-[#2563eb]" />
                 </motion.div>
               </div>
 
@@ -489,13 +488,13 @@ export default function Home() {
                 ].map((stat, i) => (
                   <motion.div 
                     key={stat.label}
-                    className="text-center p-3 rounded-xl bg-white/80 border border-gray-100 shadow-sm"
+                    className="text-center p-3 rounded-xl bg-white/80 border border-[#e4e4ec] shadow-sm"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1 + i * 0.1 }}
                   >
                     <div className="text-xl font-bold font-jetbrains gradient-text-blue">{stat.value}</div>
-                    <div className="text-xs text-gray-500 font-jetbrains">{stat.label}</div>
+                    <div className="text-xs text-[#8888a4] font-jetbrains">{stat.label}</div>
                   </motion.div>
                 ))}
               </div>
@@ -509,14 +508,14 @@ export default function Home() {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-gray-300 rounded-full mt-2" />
+          <div className="w-6 h-10 border-2 border-[#c8c8d8] rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-[#c8c8d8] rounded-full mt-2" />
           </div>
         </motion.div>
       </section>
 
       {/* ===== JOURNEY SECTION ===== */}
-      <section id="journey" className="py-20 px-6 bg-gray-50">
+      <section id="journey" className="py-20 px-6 bg-[#f4f4f8]">
         <div className="max-w-6xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -542,15 +541,15 @@ export default function Home() {
                   <div className="timeline-dot" />
                   <div className="card-glass p-6">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white shrink-0">
+                      <div className="p-3 rounded-xl bg-gradient-to-r from-[#1d4ed8] to-[#0e7490] text-white shrink-0">
                         {item.icon}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-xl font-bold">{item.title}</h3>
-                          <span className="text-xs font-jetbrains px-2 py-1 rounded-full bg-blue-50 text-blue-600">{item.type}</span>
+                          <span className="text-xs font-jetbrains px-2 py-1 rounded-full bg-[#2563eb]/8 text-[#1d4ed8]">{item.type}</span>
                         </div>
-                        <p className="text-gray-600 mb-2">{item.description}</p>
+                        <p className="text-[#4a4a68] mb-2">{item.description}</p>
                         <span className="text-sm font-jetbrains gradient-text-blue font-semibold">{item.year}</span>
                       </div>
                     </div>
@@ -577,7 +576,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center text-gray-500 font-jetbrains mb-16 text-sm"
+            className="text-center text-[#8888a4] font-jetbrains mb-16 text-sm"
           >
             Only live & working projects — no placeholders
           </motion.p>
@@ -599,12 +598,12 @@ export default function Home() {
                 </div>
                 
                 <h3 className="text-2xl font-bold mb-3 group-hover:gradient-text-blue transition-all">{project.title}</h3>
-                <p className="text-gray-600 mb-5 leading-relaxed">{project.description}</p>
+                <p className="text-[#4a4a68] mb-5 leading-relaxed">{project.description}</p>
                 
                 {/* Tech Tags */}
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((tech, techIndex) => (
-                    <span key={techIndex} className="px-3 py-1.5 bg-gray-50 text-gray-700 rounded-lg text-xs font-jetbrains border border-gray-100">
+                    <span key={techIndex} className="px-3 py-1.5 bg-[#f4f4f8] text-[#2d2d44] rounded-lg text-xs font-jetbrains border border-[#e4e4ec]">
                       {tech}
                     </span>
                   ))}
@@ -616,7 +615,7 @@ export default function Home() {
                     href={project.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-jetbrains font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                    className="inline-flex items-center gap-2 text-sm font-jetbrains font-semibold text-[#4a4a68] hover:text-[#1d4ed8] transition-colors"
                   >
                     <Github className="w-4 h-4" /> Source Code
                   </a>
@@ -625,7 +624,7 @@ export default function Home() {
                       href={project.live} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-jetbrains font-semibold text-blue-600 hover:text-purple-600 transition-colors"
+                      className="inline-flex items-center gap-2 text-sm font-jetbrains font-semibold text-[#1d4ed8] hover:text-[#6d28d9] transition-colors"
                     >
                       <ExternalLink className="w-4 h-4" /> Live Demo
                     </a>
@@ -638,7 +637,7 @@ export default function Home() {
       </section>
 
       {/* ===== ACHIEVEMENTS SECTION ===== */}
-      <section id="achievements" className="py-20 px-6 bg-gray-50">
+      <section id="achievements" className="py-20 px-6 bg-[#f4f4f8]">
         <div className="max-w-6xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -659,11 +658,11 @@ export default function Home() {
                 transition={{ delay: index * 0.15 }}
                 className="card-glass p-8 text-center"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white mb-5">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-[#1d4ed8] to-[#0e7490] text-white mb-5">
                   {achievement.icon}
                 </div>
                 <h3 className="text-lg font-bold mb-2">{achievement.title}</h3>
-                <p className="text-sm text-gray-500">{achievement.description}</p>
+                <p className="text-sm text-[#8888a4]">{achievement.description}</p>
               </motion.div>
             ))}
           </div>
@@ -687,7 +686,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-lg mb-12 text-gray-500 max-w-2xl mx-auto"
+            className="text-lg mb-12 text-[#8888a4] max-w-2xl mx-auto"
           >
             Available immediately for full-time roles. Open to relocation and excited about new challenges in AI and full-stack development.
           </motion.p>
@@ -700,19 +699,19 @@ export default function Home() {
             className="grid md:grid-cols-3 gap-6 mb-12"
           >
             <a href="mailto:karthiksaidham2001@gmail.com" className="contact-card group">
-              <Mail className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
+              <Mail className="w-8 h-8 mb-3 mx-auto text-[#2563eb] group-hover:scale-110 transition-transform" />
               <h3 className="text-lg font-bold mb-1">Email</h3>
-              <p className="text-gray-500 text-sm">karthiksaidham2001@gmail.com</p>
+              <p className="text-[#8888a4] text-sm">karthiksaidham2001@gmail.com</p>
             </a>
-            <a href="tel:9375160692" className="contact-card group">
-              <Phone className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
-              <h3 className="text-lg font-bold mb-1">Phone</h3>
-              <p className="text-gray-500 text-sm">+1 (937) 516-0692</p>
+            <a href="https://github.com/karthiksai109" target="_blank" rel="noopener noreferrer" className="contact-card group">
+              <Github className="w-8 h-8 mb-3 mx-auto text-[#1a1a2e] group-hover:scale-110 transition-transform" />
+              <h3 className="text-lg font-bold mb-1">GitHub</h3>
+              <p className="text-[#8888a4] text-sm">karthiksai109</p>
             </a>
             <a href="https://www.linkedin.com/in/ramadugukarthik/" target="_blank" rel="noopener noreferrer" className="contact-card group">
-              <Linkedin className="w-8 h-8 mb-3 mx-auto text-blue-500 group-hover:scale-110 transition-transform" />
+              <Linkedin className="w-8 h-8 mb-3 mx-auto text-[#2563eb] group-hover:scale-110 transition-transform" />
               <h3 className="text-lg font-bold mb-1">LinkedIn</h3>
-              <p className="text-gray-500 text-sm">Let&apos;s Connect</p>
+              <p className="text-[#8888a4] text-sm">Let&apos;s Connect</p>
             </a>
           </motion.div>
           
@@ -734,24 +733,24 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 px-6">
+      <footer className="bg-[#1a1a2e] text-white py-8 px-6">
         <div className="max-w-6xl mx-auto text-center">
           <p className="font-jetbrains text-sm">&copy; 2025 Karthik Ramadugu</p>
-          <p className="text-gray-400 text-xs mt-2 font-jetbrains">Full-Stack AI Engineer | Built with Next.js, Framer Motion & AI</p>
+          <p className="text-[#8888a4] text-xs mt-2 font-jetbrains">Full-Stack AI Engineer | Built with Next.js, Framer Motion & AI</p>
         </div>
       </footer>
 
       {/* ===== AI ASSISTANT FLOATING BUTTON ===== */}
       <motion.button
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl hover:shadow-blue-500/25"
+        className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-gradient-to-r from-[#1a1a2e] to-[#1d4ed8] text-white shadow-2xl hover:shadow-[#2563eb]/25"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         animate={{ y: [0, -5, 0] }}
         transition={{ y: { duration: 2, repeat: Infinity } }}
       >
         <Bot className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#15803d] rounded-full border-2 border-white" />
       </motion.button>
 
       {/* ===== AI CHAT MODAL ===== */}
@@ -761,17 +760,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-[#e4e4ec] overflow-hidden"
           >
             {/* Chat Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-[#1a1a2e] to-[#1d4ed8] text-white p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
                   <Bot className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="font-bold font-jetbrains text-sm">Karthik&apos;s AI Assistant</h3>
-                  <p className="text-xs text-blue-100">Powered by custom NLP</p>
+                  <p className="text-xs text-white/60">Powered by custom NLP</p>
                 </div>
               </div>
               <button onClick={() => setIsChatOpen(false)} className="p-1 hover:bg-white/20 rounded-lg transition-colors">
@@ -780,7 +779,7 @@ export default function Home() {
             </div>
 
             {/* Chat Messages */}
-            <div className="h-80 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <div className="h-80 overflow-y-auto p-4 space-y-4 bg-[#f4f4f8]">
               {chatMessages.map((msg, index) => (
                 <motion.div
                   key={index}
@@ -790,8 +789,8 @@ export default function Home() {
                 >
                   <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
                     msg.role === 'user' 
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-br-md' 
-                      : 'bg-white border border-gray-200 text-gray-700 rounded-bl-md shadow-sm'
+                      ? 'bg-gradient-to-r from-[#1a1a2e] to-[#1d4ed8] text-white rounded-br-md' 
+                      : 'bg-white border border-[#e4e4ec] text-[#2d2d44] rounded-bl-md shadow-sm'
                   }`}>
                     {msg.content}
                   </div>
@@ -799,11 +798,11 @@ export default function Home() {
               ))}
               {isTyping && (
                 <div className="flex justify-start">
-                  <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-md shadow-sm">
+                  <div className="bg-white border border-[#e4e4ec] p-3 rounded-2xl rounded-bl-md shadow-sm">
                     <div className="flex gap-1.5">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <div className="w-2 h-2 bg-[#c8c8d8] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 bg-[#c8c8d8] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 bg-[#c8c8d8] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   </div>
                 </div>
@@ -812,13 +811,13 @@ export default function Home() {
             </div>
 
             {/* Quick Questions */}
-            <div className="px-4 py-2 border-t border-gray-100 bg-white">
+            <div className="px-4 py-2 border-t border-[#e4e4ec] bg-white">
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 {['Skills?', 'Projects?', 'Why hire?', 'Contact?'].map((q) => (
                   <button
                     key={q}
                     onClick={() => { setChatInput(q); }}
-                    className="shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors font-jetbrains"
+                    className="shrink-0 text-xs px-3 py-1.5 rounded-full bg-[#f4f4f8] text-[#4a4a68] hover:bg-[#2563eb]/8 hover:text-[#1d4ed8] transition-colors font-jetbrains"
                   >
                     {q}
                   </button>
@@ -827,7 +826,7 @@ export default function Home() {
             </div>
 
             {/* Chat Input */}
-            <div className="p-3 border-t border-gray-100 bg-white">
+            <div className="p-3 border-t border-[#e4e4ec] bg-white">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -835,11 +834,11 @@ export default function Home() {
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask about Karthik..."
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm font-jetbrains focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-[#f4f4f8] border border-[#e4e4ec] text-sm font-jetbrains focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10 transition-all"
                 />
                 <motion.button
                   onClick={handleSendMessage}
-                  className="p-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white disabled:opacity-50"
+                  className="p-2.5 rounded-xl bg-gradient-to-r from-[#1a1a2e] to-[#1d4ed8] text-white disabled:opacity-50"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   disabled={!chatInput.trim() || isTyping}
@@ -888,7 +887,7 @@ export default function Home() {
                 ))}
                 <button
                   onClick={() => { setIsMenuOpen(false); setIsChatOpen(true); }}
-                  className="w-full text-left nav-link py-3 flex items-center gap-2 text-purple-600"
+                  className="w-full text-left nav-link py-3 flex items-center gap-2 text-[#6d28d9]"
                 >
                   <Bot className="w-4 h-4" /> AI Assistant
                 </button>

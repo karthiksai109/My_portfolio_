@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Brain, Code, Zap, Trophy, Star, Target, Rocket, Cpu, Database, Cloud, Smartphone, Terminal, Coffee, Camera, Gamepad2, Award, Heart, Calendar, Mail, Users, Briefcase } from 'lucide-react'
+import { ArrowLeft, Code, Zap, Trophy, Star, Target, Cpu, Database, Cloud, Coffee, Gamepad2, Heart, Calendar, Mail, Users, Briefcase } from 'lucide-react'
 import Link from 'next/link'
 
 interface Challenge {
@@ -57,13 +57,13 @@ export default function Game() {
       correctIndex: 0,
       points: 100,
       icon: <Cpu className="w-6 h-6" />,
-      color: "from-blue-500 to-cyan-500",
-      hobby: "Problem Solving"
+      color: "from-[#1d4ed8] to-[#0e7490]",
+      hobby: "Adaptability"
     },
     {
       id: 2,
       title: "Python to MERN",
-      question: "What's the advantage of using MERN stack over Python Django?",
+      question: "What&apos;s the advantage of using MERN stack over Python Django?",
       hint: "Think about JavaScript ecosystem",
       options: [
         "Single language (JavaScript) across frontend and backend",
@@ -74,8 +74,8 @@ export default function Game() {
       correctIndex: 0,
       points: 150,
       icon: <Code className="w-6 h-6" />,
-      color: "from-green-500 to-emerald-500",
-      hobby: "Full-Stack Development"
+      color: "from-[#15803d] to-[#0e7490]",
+      hobby: "Problem Solving"
     },
     {
       id: 3,
@@ -91,13 +91,13 @@ export default function Game() {
       correctIndex: 0,
       points: 120,
       icon: <Database className="w-6 h-6" />,
-      color: "from-purple-500 to-pink-500",
-      hobby: "Data Management"
+      color: "from-[#6d28d9] to-[#1d4ed8]",
+      hobby: "Innovation"
     },
     {
       id: 4,
       title: "Cloud Architecture",
-      question: "What's the benefit of serverless architecture?",
+      question: "What&apos;s the benefit of serverless architecture?",
       hint: "Think about resource management",
       options: [
         "Automatic scaling with minimal server management",
@@ -108,8 +108,8 @@ export default function Game() {
       correctIndex: 0,
       points: 180,
       icon: <Cloud className="w-6 h-6" />,
-      color: "from-indigo-500 to-blue-500",
-      hobby: "Cloud Computing"
+      color: "from-[#0e7490] to-[#1d4ed8]",
+      hobby: "Hard Work"
     },
     {
       id: 5,
@@ -125,8 +125,8 @@ export default function Game() {
       correctIndex: 0,
       points: 200,
       icon: <Coffee className="w-6 h-6" />,
-      color: "from-yellow-500 to-orange-500",
-      hobby: "Coffee Enthusiast"
+      color: "from-[#a16207] to-[#c2410c]",
+      hobby: "Dedication"
     },
     {
       id: 6,
@@ -142,8 +142,8 @@ export default function Game() {
       correctIndex: 0,
       points: 250,
       icon: <Gamepad2 className="w-6 h-6" />,
-      color: "from-red-500 to-rose-500",
-      hobby: "Cricket & Strategy"
+      color: "from-[#c2410c] to-[#a16207]",
+      hobby: "Strategic Thinking"
     }
   ]
 
@@ -153,28 +153,28 @@ export default function Game() {
       title: "Connect on LinkedIn",
       description: "Open LinkedIn + email Karthik",
       icon: <Users className="w-6 h-6" />,
-      color: "from-blue-500 to-blue-700"
+      color: "from-[#1d4ed8] to-[#0e7490]"
     },
     {
       type: 'schedule',
       title: "Schedule Interview",
       description: "Book a 30-minute interview slot",
       icon: <Calendar className="w-6 h-6" />,
-      color: "from-blue-500 to-blue-700"
+      color: "from-[#6d28d9] to-[#1d4ed8]"
     },
     {
       type: 'hire',
       title: "Hire Karthik Directly",
       description: "Send hiring inquiry directly",
       icon: <Briefcase className="w-6 h-6" />,
-      color: "from-blue-500 to-blue-700"
+      color: "from-[#15803d] to-[#0e7490]"
     },
     {
       type: 'refer',
       title: "Refer Karthik",
       description: "Refer to your network",
       icon: <Target className="w-6 h-6" />,
-      color: "from-blue-500 to-blue-700"
+      color: "from-[#c2410c] to-[#a16207]"
     }
   ]
 
@@ -200,7 +200,7 @@ export default function Game() {
 
     if (selectedOption === currentChallenge.correctIndex) {
       setScore(score + currentChallenge.points)
-      setFeedback(`✅ Correct! +${currentChallenge.points} points - ${currentChallenge.hobby} skill unlocked!`)
+      setFeedback(`Correct! +${currentChallenge.points} points — ${currentChallenge.hobby} unlocked!`)
       setCompletedLevels([...completedLevels, currentChallenge.id])
       
       setTimeout(() => {
@@ -218,10 +218,10 @@ export default function Game() {
       setLives(lives - 1)
       setSelectedOption(null)
       if (lives <= 1) {
-        setFeedback(`❌ Game Over! You scored ${score} points`)
+        setFeedback(`Game Over! You scored ${score} points`)
         setTimeout(() => setGameState('menu'), 3000)
       } else {
-        setFeedback(`❌ Oops! ${lives - 1} lives remaining — try again`) 
+        setFeedback(`Wrong! ${lives - 1} lives remaining — try again`) 
       }
     }
   }
@@ -252,20 +252,9 @@ export default function Game() {
 
   const handleScheduleInterview = () => {
     if (selectedSlot && selectedDate) {
-      const emailBody = `Hi Karthik,
-
-I would like to schedule an interview with you.
-
-Selected Date: ${selectedDate}
-Selected Time Slot: ${selectedSlot}
-Name: ${formData.name}
-Email: ${formData.email}
-Message: ${formData.message}
-
-Looking forward to speaking with you!`
-
+      const emailBody = `Hi Karthik,\n\nI would like to schedule an interview.\n\nDate: ${selectedDate}\nTime: ${selectedSlot}\nName: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}\n\nLooking forward to speaking with you!`
       window.location.href = `mailto:karthiksaidham2001@gmail.com?subject=Interview Request - ${selectedDate} ${selectedSlot}&body=${encodeURIComponent(emailBody)}`
-      setFeedback('✅ Interview request sent! Check your email for confirmation.')
+      setFeedback('Interview request sent! Check your email.')
       setShowCalendar(false)
       setSelectedDate('')
       setSelectedSlot('')
@@ -273,18 +262,9 @@ Looking forward to speaking with you!`
   }
 
   const handleHireDirectly = () => {
-    const emailBody = `Hi Karthik,
-
-I would like to hire you directly.
-
-Company: ${formData.name}
-Email: ${formData.email}
-Message: ${formData.message}
-
-Looking forward to working with you!`
-
+    const emailBody = `Hi Karthik,\n\nI would like to hire you directly.\n\nCompany: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}\n\nLooking forward to working with you!`
     window.location.href = `mailto:karthiksaidham2001@gmail.com?subject=Hiring Inquiry&body=${encodeURIComponent(emailBody)}`
-    setFeedback('✅ Hiring inquiry sent! Karthik will reach out to you shortly.')
+    setFeedback('Hiring inquiry sent! Karthik will reach out shortly.')
     setFormData({ name: '', email: '', linkedin: '', message: '' })
   }
 
@@ -305,87 +285,89 @@ Looking forward to working with you!`
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="fixed inset-0 grid-background opacity-20 pointer-events-none" />
+    <div className="min-h-screen game-bg text-white">
+      <div className="fixed inset-0 game-grid-bg pointer-events-none" />
       
-      <nav className="fixed top-0 w-full z-50 glass-strong px-6 py-4">
+      {/* Nav */}
+      <nav className="fixed top-0 w-full z-50 game-nav px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-            Back to Portfolio
+          <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors font-jetbrains text-sm">
+            <ArrowLeft className="w-4 h-4" />
+            Portfolio
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5 font-jetbrains text-sm">
             <div className="flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-blue-400" />
+              <Trophy className="w-4 h-4 text-[#a16207]" />
               <span className="font-bold">{score}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-blue-400" />
-              <span>Level {level}/{challenges.length}</span>
+            <div className="flex items-center gap-2 text-white/60">
+              <Star className="w-4 h-4" />
+              <span>{level}/{challenges.length}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Heart className="w-5 h-5 text-blue-400" />
+              <Heart className="w-4 h-4 text-[#c2410c]" />
               <span>{lives}</span>
             </div>
           </div>
         </div>
       </nav>
 
+      {/* MENU */}
       {gameState === 'menu' && (
         <div className="min-h-screen flex items-center justify-center px-6 relative z-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-center max-w-4xl"
+            className="text-center max-w-3xl"
           >
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 mb-8"
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r from-[#1d4ed8] to-[#0e7490] mb-8"
             >
-              <Gamepad2 className="w-12 h-12 text-white" />
+              <Gamepad2 className="w-10 h-10 text-white" />
             </motion.div>
             
-            <h1 className="text-5xl md:text-6xl font-bold font-space-grotesk mb-6 gradient-text">
-              Karthik's Tech Journey Game
+            <h1 className="text-4xl md:text-5xl font-bold font-jetbrains mb-4 bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent">
+              Tech Journey Challenge
             </h1>
             
-            <p className="text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
-              Test your knowledge and discover Karthik's versatile journey from ECE to Computer Science, 
-              Python to MERN stack, and his hobbies including Cricket and Coffee!
+            <p className="text-base mb-10 text-white/50 max-w-xl mx-auto font-jetbrains leading-relaxed">
+              Discover Karthik&apos;s adaptability, problem-solving skills, and innovative thinking 
+              through 6 challenges spanning ECE to CS, Python to MERN, and beyond.
             </p>
             
-            <div className="grid md:grid-cols-3 gap-4 mb-8 max-w-3xl mx-auto">
-              <div className="glass-strong p-4 rounded-lg">
-                <Code className="w-8 h-8 mx-auto mb-2 text-blue-400" />
-                <h3 className="font-semibold mb-1">6 Challenges</h3>
-                <p className="text-sm text-gray-400">Test diverse tech knowledge</p>
+            <div className="grid md:grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
+              <div className="game-card p-5 rounded-xl">
+                <Code className="w-7 h-7 mx-auto mb-3 text-[#2563eb]" />
+                <h3 className="font-semibold text-sm mb-1 font-jetbrains">6 Challenges</h3>
+                <p className="text-xs text-white/40">Test diverse tech knowledge</p>
               </div>
-              <div className="glass-strong p-4 rounded-lg">
-                <Zap className="w-8 h-8 mx-auto mb-2 text-blue-400" />
-                <h3 className="font-semibold mb-1">1000 Points</h3>
-                <p className="text-sm text-gray-400">Maximum score achievable</p>
+              <div className="game-card p-5 rounded-xl">
+                <Zap className="w-7 h-7 mx-auto mb-3 text-[#a16207]" />
+                <h3 className="font-semibold text-sm mb-1 font-jetbrains">1000 Points</h3>
+                <p className="text-xs text-white/40">Maximum score achievable</p>
               </div>
-              <div className="glass-strong p-4 rounded-lg">
-                <Coffee className="w-8 h-8 mx-auto mb-2 text-blue-400" />
-                <h3 className="font-semibold mb-1">Hobby Based</h3>
-                <p className="text-sm text-gray-400">Cricket & Coffee challenges</p>
+              <div className="game-card p-5 rounded-xl">
+                <Coffee className="w-7 h-7 mx-auto mb-3 text-[#c2410c]" />
+                <h3 className="font-semibold text-sm mb-1 font-jetbrains">Personality Based</h3>
+                <p className="text-xs text-white/40">Cricket & Coffee challenges</p>
               </div>
             </div>
             
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               onClick={startGame}
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl font-bold text-lg hover-lift"
+              className="game-btn game-btn-primary text-base px-10 py-4"
             >
               Start Challenge
             </motion.button>
 
-            <div className="mt-4">
+            <div className="mt-5">
               <button
                 onClick={skipToFinal}
-                className="text-sm text-gray-300 hover:text-white transition-colors underline underline-offset-4"
+                className="text-xs text-white/30 hover:text-white/60 transition-colors font-jetbrains"
               >
                 Skip to Final Options
               </button>
@@ -394,94 +376,88 @@ Looking forward to working with you!`
         </div>
       )}
 
+      {/* PLAYING */}
       {gameState === 'playing' && currentChallenge && (
         <div className="min-h-screen flex items-center justify-center px-6 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-2xl w-full"
           >
-            <div className="glass-strong p-8 rounded-2xl">
+            <div className="game-card p-8 rounded-2xl">
               <div className="flex items-center justify-between mb-6">
-                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${currentChallenge.color}`}>
+                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${currentChallenge.color} text-sm`}>
                   {currentChallenge.icon}
-                  <span className="font-semibold text-white">{currentChallenge.title}</span>
+                  <span className="font-semibold font-jetbrains">{currentChallenge.title}</span>
                 </div>
-                <div className="text-sm text-gray-400">
-                  {currentChallenge.points} points • {currentChallenge.hobby}
+                <div className="text-xs text-white/40 font-jetbrains">
+                  {currentChallenge.points} pts &middot; {currentChallenge.hobby}
                 </div>
               </div>
               
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4">Challenge {level}</h2>
-                <p className="text-lg text-gray-300 mb-6">{currentChallenge.question}</p>
+                <h2 className="text-xl font-bold mb-4 font-jetbrains">Challenge {level}</h2>
+                <p className="text-base text-white/70 mb-6 leading-relaxed">{currentChallenge.question}</p>
                 
                 {showHint && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
-                    className="glass-strong p-4 rounded-lg mb-4"
+                    className="game-card p-4 rounded-xl mb-4"
                   >
-                    <p className="text-sm text-gray-400">
-                      <span className="text-yellow-400">💡 Hint:</span> {currentChallenge.hint}
+                    <p className="text-sm text-white/50">
+                      <span className="text-[#a16207] font-semibold">Hint:</span> {currentChallenge.hint}
                     </p>
                   </motion.div>
                 )}
                 
                 <div className="space-y-3">
-                  {currentChallenge.options.map((opt, idx) => {
-                    const isActive = selectedOption === idx
-                    return (
-                      <button
-                        key={opt}
-                        onClick={() => setSelectedOption(idx)}
-                        className={`w-full text-left px-4 py-3 rounded-lg transition-colors border ${
-                          isActive
-                            ? 'bg-blue-600/20 border-blue-500'
-                            : 'bg-gray-900/40 border-white/10 hover:border-blue-500/60'
-                        }`}
-                      >
-                        <span className="text-gray-100">{opt}</span>
-                      </button>
-                    )
-                  })}
+                  {currentChallenge.options.map((opt, idx) => (
+                    <button
+                      key={opt}
+                      onClick={() => setSelectedOption(idx)}
+                      className={`game-option ${selectedOption === idx ? 'game-option-active' : ''}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
 
-                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-3">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={checkAnswer}
                       disabled={selectedOption === null}
-                      className="flex-1 px-6 py-3 bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="game-btn game-btn-primary flex-1 justify-center disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       Lock Choice
                     </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                    <button
                       onClick={() => setShowHint(!showHint)}
-                      className="px-6 py-3 glass-strong rounded-lg font-semibold hover-lift"
+                      className="game-btn game-btn-ghost justify-center"
                     >
                       {showHint ? 'Hide Hint' : 'Hint'}
-                    </motion.button>
+                    </button>
                     <button
                       onClick={skipToFinal}
-                      className="px-6 py-3 glass-strong rounded-lg font-semibold hover-lift"
+                      className="game-btn game-btn-ghost justify-center"
                     >
-                      Final Options
+                      Skip
                     </button>
                   </div>
                 </div>
                 
                 {feedback && (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`mt-4 p-4 rounded-lg ${
-                      feedback.includes('✅') ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'
+                    className={`mt-5 p-4 rounded-xl text-sm font-jetbrains ${
+                      feedback.includes('Correct') 
+                        ? 'bg-[#15803d]/20 text-[#4ade80] border border-[#15803d]/30' 
+                        : 'bg-[#c2410c]/20 text-[#fb923c] border border-[#c2410c]/30'
                     }`}
                   >
-                    <p className="font-semibold">{feedback}</p>
+                    {feedback}
                   </motion.div>
                 )}
               </div>
@@ -491,21 +467,21 @@ Looking forward to working with you!`
                   {challenges.map((_, index) => (
                     <div
                       key={index}
-                      className={`w-3 h-3 rounded-full ${
+                      className={`w-2.5 h-2.5 rounded-full transition-colors ${
                         completedLevels.includes(index + 1)
-                          ? 'bg-green-500'
+                          ? 'bg-[#15803d]'
                           : index + 1 === level
-                          ? 'bg-red-500'
-                          : 'bg-gray-600'
+                          ? 'bg-[#2563eb]'
+                          : 'bg-white/10'
                       }`}
                     />
                   ))}
                 </div>
                 <button
                   onClick={resetGame}
-                  className="text-gray-400 hover:text-gray-200 transition-colors"
+                  className="text-xs text-white/30 hover:text-white/60 transition-colors font-jetbrains"
                 >
-                  Exit Game
+                  Exit
                 </button>
               </div>
             </div>
@@ -513,78 +489,77 @@ Looking forward to working with you!`
         </div>
       )}
 
+      {/* COMPLETED */}
       {gameState === 'completed' && (
-        <div className="min-h-screen flex items-center justify-center px-6">
+        <div className="min-h-screen flex items-center justify-center px-6 relative z-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="text-center max-w-4xl"
           >
             <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-              className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 mb-8"
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r from-[#a16207] to-[#c2410c] mb-8"
             >
-              <Trophy className="w-12 h-12 text-white" />
+              <Trophy className="w-10 h-10 text-white" />
             </motion.div>
             
-            <h1 className="text-5xl md:text-6xl font-bold font-space-grotesk mb-6 gradient-text">
-              Congratulations! 🎉
+            <h1 className="text-4xl md:text-5xl font-bold font-jetbrains mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+              Challenge Complete
             </h1>
             
-            <p className="text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
-              You've completed Karthik's Tech Journey Challenge! 
-              You've seen his versatility from ECE to CS, Python to MERN, and even his Cricket & Coffee hobbies!
+            <p className="text-base mb-8 text-white/50 max-w-xl mx-auto font-jetbrains leading-relaxed">
+              You&apos;ve experienced Karthik&apos;s versatility — from ECE to CS, 
+              Python to MERN, and his problem-solving mindset. Ready to connect?
             </p>
             
-            <div className="glass-strong p-8 rounded-2xl mb-8 max-w-md mx-auto">
-              <div className="text-4xl font-bold gradient-text mb-2">{score}</div>
-              <div className="text-gray-400 mb-4">Final Score</div>
+            <div className="game-card p-8 rounded-2xl mb-10 max-w-sm mx-auto">
+              <div className="text-4xl font-bold font-jetbrains bg-gradient-to-r from-[#a16207] to-[#c2410c] bg-clip-text text-transparent mb-2">{score}</div>
+              <div className="text-white/40 text-sm font-jetbrains mb-4">Final Score</div>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <div className="font-semibold">Challenges</div>
-                  <div className="text-gray-400">{completedLevels.length}/{challenges.length}</div>
+                  <div className="font-semibold font-jetbrains">Challenges</div>
+                  <div className="text-white/40">{completedLevels.length}/{challenges.length}</div>
                 </div>
                 <div>
-                  <div className="font-semibold">Accuracy</div>
-                  <div className="text-gray-400">100%</div>
+                  <div className="font-semibold font-jetbrains">Accuracy</div>
+                  <div className="text-white/40">{completedLevels.length > 0 ? '100%' : 'N/A'}</div>
                 </div>
               </div>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10 max-w-4xl mx-auto">
               {actions.map((action, index) => (
                 <motion.button
                   key={action.type}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
                   onClick={() => handleAction(action)}
-                  className="glass-strong p-6 rounded-xl text-center hover-lift group"
+                  className="game-card p-6 rounded-xl text-center group"
                 >
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${action.color} mb-4 group-hover:scale-110 transition-transform`}>
+                  <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-r ${action.color} mb-4 group-hover:scale-110 transition-transform`}>
                     {action.icon}
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{action.title}</h3>
-                  <p className="text-sm text-gray-400">{action.description}</p>
+                  <h3 className="text-sm font-semibold mb-1 font-jetbrains">{action.title}</h3>
+                  <p className="text-xs text-white/40">{action.description}</p>
                 </motion.button>
               ))}
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={resetGame}
-                className="px-8 py-3 glass-strong rounded-lg font-semibold hover-lift"
+                className="game-btn game-btn-ghost"
               >
                 Play Again
               </motion.button>
-              <Link href="/#contact"
-                className="px-8 py-3 bg-gradient-to-r from-red-500 to-green-500 rounded-lg font-semibold hover-lift text-center text-white"
-              >
+              <Link href="/#contact" className="game-btn game-btn-primary text-center">
                 View Portfolio
               </Link>
             </div>
@@ -592,6 +567,7 @@ Looking forward to working with you!`
         </div>
       )}
 
+      {/* Schedule Modal */}
       <AnimatePresence>
         {showCalendar && (
           <motion.div
@@ -602,22 +578,22 @@ Looking forward to working with you!`
             onClick={() => setShowCalendar(false)}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="glass-strong rounded-2xl max-w-md w-full p-6"
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="game-card rounded-2xl max-w-md w-full p-6"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold mb-4 gradient-text">Schedule Interview</h3>
-              <p className="text-gray-300 mb-6">Select a 30-minute time slot</p>
+              <h3 className="text-xl font-bold mb-2 font-jetbrains">Schedule Interview</h3>
+              <p className="text-white/40 text-sm mb-6 font-jetbrains">Select a 30-minute time slot</p>
 
               <div className="mb-4">
-                <label className="block text-sm text-gray-300 mb-2">Select Date</label>
+                <label className="block text-xs text-white/50 mb-2 font-jetbrains">Date</label>
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#2563eb] text-white text-sm font-jetbrains transition-colors"
                 />
               </div>
               
@@ -626,10 +602,10 @@ Looking forward to working with you!`
                   <button
                     key={slot}
                     onClick={() => setSelectedSlot(slot)}
-                    className={`p-3 rounded-lg transition-colors ${
+                    className={`p-2.5 rounded-lg text-xs font-jetbrains transition-all ${
                       selectedSlot === slot
-                        ? 'bg-blue-600 text-white'
-                        : 'glass-strong hover:bg-gray-700'
+                        ? 'bg-[#1d4ed8] text-white'
+                        : 'bg-white/5 border border-white/8 text-white/60 hover:bg-white/10'
                     }`}
                   >
                     {slot}
@@ -637,50 +613,26 @@ Looking forward to working with you!`
                 ))}
               </div>
               
-              <div className="space-y-4 mb-6">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
-                />
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
-                />
-                <textarea
-                  placeholder="Message (optional)"
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-white resize-none"
-                  rows={3}
-                />
+              <div className="space-y-3 mb-6">
+                <input type="text" placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#2563eb] text-white text-sm font-jetbrains transition-colors" />
+                <input type="email" placeholder="Your Email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#2563eb] text-white text-sm font-jetbrains transition-colors" />
+                <textarea placeholder="Message (optional)" value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} rows={3}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#2563eb] text-white text-sm font-jetbrains resize-none transition-colors" />
               </div>
               
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setShowCalendar(false)}
-                  className="flex-1 px-4 py-2 glass-strong rounded-lg font-semibold hover-lift"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleScheduleInterview}
-                  disabled={!selectedDate || !selectedSlot || !formData.email}
-                  className="flex-1 px-4 py-2 bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Schedule
-                </button>
+              <div className="flex gap-3">
+                <button onClick={() => setShowCalendar(false)} className="game-btn game-btn-ghost flex-1 justify-center text-sm">Cancel</button>
+                <button onClick={handleScheduleInterview} disabled={!selectedDate || !selectedSlot || !formData.email}
+                  className="game-btn game-btn-primary flex-1 justify-center text-sm disabled:opacity-40 disabled:cursor-not-allowed">Schedule</button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* Hire Modal */}
       <AnimatePresence>
         {gameState === 'actions' && selectedAction?.type === 'hire' && (
           <motion.div
@@ -691,62 +643,34 @@ Looking forward to working with you!`
             onClick={() => setGameState('completed')}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="glass-strong rounded-2xl max-w-md w-full p-6"
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="game-card rounded-2xl max-w-md w-full p-6"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold mb-4 gradient-text">Hire Karthik Directly</h3>
-              <p className="text-gray-300 mb-6">Send your hiring inquiry directly to Karthik</p>
+              <h3 className="text-xl font-bold mb-2 font-jetbrains">Hire Karthik</h3>
+              <p className="text-white/40 text-sm mb-6 font-jetbrains">Send your hiring inquiry directly</p>
               
-              <div className="space-y-4 mb-6">
-                <input
-                  type="text"
-                  placeholder="Company Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
-                />
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
-                />
-                <textarea
-                  placeholder="Job Details / Message"
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-white resize-none"
-                  rows={4}
-                />
+              <div className="space-y-3 mb-6">
+                <input type="text" placeholder="Company Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#2563eb] text-white text-sm font-jetbrains transition-colors" />
+                <input type="email" placeholder="Your Email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#2563eb] text-white text-sm font-jetbrains transition-colors" />
+                <textarea placeholder="Job Details / Message" value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} rows={4}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#2563eb] text-white text-sm font-jetbrains resize-none transition-colors" />
               </div>
               
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setGameState('completed')}
-                  className="flex-1 px-4 py-2 glass-strong rounded-lg font-semibold hover-lift"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleHireDirectly}
-                  disabled={!formData.name || !formData.email}
-                  className="flex-1 px-4 py-2 bg-orange-500 rounded-lg font-semibold hover:bg-orange-600 transition-colors text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Send Inquiry
-                </button>
+              <div className="flex gap-3">
+                <button onClick={() => setGameState('completed')} className="game-btn game-btn-ghost flex-1 justify-center text-sm">Cancel</button>
+                <button onClick={handleHireDirectly} disabled={!formData.name || !formData.email}
+                  className="flex-1 game-btn text-sm justify-center bg-gradient-to-r from-[#c2410c] to-[#ea580c] text-white disabled:opacity-40 disabled:cursor-not-allowed">Send Inquiry</button>
               </div>
               
               {feedback && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 rounded-lg bg-green-900 text-green-200"
-                >
-                  <p className="font-semibold">{feedback}</p>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-3 rounded-xl text-sm font-jetbrains bg-[#15803d]/20 text-[#4ade80] border border-[#15803d]/30">
+                  {feedback}
                 </motion.div>
               )}
             </motion.div>
