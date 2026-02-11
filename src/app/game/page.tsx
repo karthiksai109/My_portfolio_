@@ -49,6 +49,19 @@ const QUESTION_POOL: Omit<Challenge, 'id'>[] = [
   { question: "What makes a great developer?", options: ["Curiosity + persistence", "Memorizing syntax", "Never asking for help", "Only working alone"], correctIndex: 0, points: 100, emoji: "⭐", tag: "Wisdom" },
   { question: "Framer Motion is used for?", options: ["React animations", "Database queries", "Server hosting", "File compression"], correctIndex: 0, points: 75, emoji: "✨", tag: "Animation" },
   { question: "How many bits in a byte?", options: ["8", "4", "16", "32"], correctIndex: 0, points: 50, emoji: "💾", tag: "CS Basics" },
+  { question: "How is cricket like software dev?", options: ["Both need strategy, teamwork & adapting", "Both are only about speed", "Both avoid planning", "They're totally unrelated"], correctIndex: 0, points: 100, emoji: "🏏", tag: "Cricket" },
+  { question: "In cricket, what's a 'duck'?", options: ["Out for zero runs", "A fielding position", "A type of bowling", "A celebration dance"], correctIndex: 0, points: 75, emoji: "🏏", tag: "Cricket" },
+  { question: "Best batting approach = best coding approach?", options: ["Read the situation, then play your shot", "Swing at everything blindly", "Never take risks", "Copy someone else's style"], correctIndex: 0, points: 100, emoji: "🏏", tag: "Cricket" },
+  { question: "What does a cricket captain & tech lead share?", options: ["Decision-making under pressure", "They both bowl fast", "Nothing in common", "They avoid teamwork"], correctIndex: 0, points: 100, emoji: "🏏", tag: "Cricket" },
+  { question: "Which coffee method gives smoothest flavor?", options: ["Cold brew (slow steep)", "Instant microwave", "Boil grounds in a pot", "Just add sugar to water"], correctIndex: 0, points: 75, emoji: "☕", tag: "Coffee" },
+  { question: "What's a French press?", options: ["A coffee brewing device", "A gym exercise", "A CSS framework", "A keyboard shortcut"], correctIndex: 0, points: 75, emoji: "☕", tag: "Coffee" },
+  { question: "Ideal coffee for a late-night deploy?", options: ["Steady drip coffee for sustained focus", "5 energy drinks at once", "Decaf (why bother?)", "Skip drinks, just panic"], correctIndex: 0, points: 100, emoji: "☕", tag: "Coffee" },
+  { question: "Pour-over coffee is loved by devs because?", options: ["It rewards patience & precision", "It's the cheapest option", "It takes zero effort", "It tastes like instant"], correctIndex: 0, points: 75, emoji: "☕", tag: "Coffee" },
+  { question: "Karthik's degree before CS was?", options: ["Electronics & Communication (ECE)", "Mechanical Engineering", "Business Administration", "Fine Arts"], correctIndex: 0, points: 100, emoji: "🎓", tag: "About Me" },
+  { question: "Karthik's MS is from?", options: ["University of Dayton", "MIT", "Stanford", "Harvard"], correctIndex: 0, points: 75, emoji: "🎓", tag: "About Me" },
+  { question: "What's Karthik's superpower?", options: ["Bridging hardware (ECE) + software (CS)", "Flying", "Reading minds", "Time travel"], correctIndex: 0, points: 100, emoji: "💪", tag: "About Me" },
+  { question: "Cricket teaches developers to?", options: ["Stay patient & wait for the right moment", "Rush every decision", "Ignore the team", "Never practice"], correctIndex: 0, points: 100, emoji: "🏏", tag: "Cricket" },
+  { question: "Espresso vs Americano — what's the diff?", options: ["Americano adds hot water to espresso", "They're the same thing", "Espresso has milk", "Americano is cold brew"], correctIndex: 0, points: 75, emoji: "☕", tag: "Coffee" },
 ]
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -288,8 +301,8 @@ export default function Game() {
             </h1>
             
             <p className="text-sm sm:text-base mb-8 sm:mb-10 text-white/50 max-w-md sm:max-w-xl mx-auto font-jetbrains leading-relaxed px-2">
-              6 random questions from a pool of 25+. Different every time you play!
-              Fun, fast, and full of surprises.
+              6 random questions from a pool of 39 — tech, cricket, coffee &amp; more.
+              Different every time. Fun, fast, and personal!
             </p>
             
             <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10 max-w-sm sm:max-w-2xl mx-auto">
