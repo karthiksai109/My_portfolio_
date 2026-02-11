@@ -36,6 +36,17 @@ interface ChatMessage {
   content: string
 }
 
+interface GitHubRepo {
+  name: string
+  description: string | null
+  html_url: string
+  homepage: string | null
+  topics: string[]
+  language: string | null
+  pushed_at: string
+  updated_at: string
+}
+
 const AI_KNOWLEDGE_BASE: Record<string, string> = {
   skills: "Karthik is proficient in React, Next.js, TypeScript, Node.js, Python, TensorFlow, MongoDB, AWS, Docker, and more. He specializes in full-stack development with AI/ML integration.",
   experience: "Karthik transitioned from Electronics & Communication Engineering (ECE) to Computer Science, earning his MS from the University of Dayton. He has expertise in MERN stack, Python AI/ML, and cloud technologies.",
@@ -97,6 +108,8 @@ export default function Home() {
   ])
   const [chatInput, setChatInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [dynamicProjects, setDynamicProjects] = useState<{title: string; description: string; tech: string[]; link: string; live: string | null; featured: boolean; color: string}[] | null>(null)
+  const [projectsLoading, setProjectsLoading] = useState(true)
   const chatEndRef = useRef<HTMLDivElement>(null)
   
   const containerRef = useRef(null)
@@ -152,7 +165,7 @@ export default function Home() {
     }, 800 + Math.random() * 700)
   }
 
-  const projects = [
+  const fallbackProjects = [
     {
       title: "E-Commerce Analytics Platform",
       description: "Real-time analytics dashboard with AI-powered insights for tracking sales, customer behavior, and inventory management. Features interactive charts, product tables, and customer segmentation.",
@@ -172,6 +185,64 @@ export default function Home() {
       color: "from-[#15803d] to-[#0e7490]"
     }
   ]
+
+  const colorPairs = [
+    "from-[#1d4ed8] to-[#0e7490]",
+    "from-[#15803d] to-[#0e7490]",
+    "from-[#6d28d9] to-[#1d4ed8]",
+    "from-[#c2410c] to-[#a16207]"
+  ]
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        const res = await fetch(
+          'https://api.github.com/users/karthiksai109/repos?sort=pushed&direction=desc&per_page=10'
+        )
+        if (!res.ok) throw new Error('GitHub API error')
+        const repos: GitHubRepo[] = await res.json()
+
+        const filtered = repos
+          .filter(r => !r.name.startsWith('.') && r.description !== null)
+          .slice(0, 2)
+
+        if (filtered.length > 0) {
+          const mapped = filtered.map((repo, i) => {
+            const techTags: string[] = []
+            if (repo.topics && repo.topics.length > 0) {
+              techTags.push(...repo.topics.slice(0, 5).map(t => t.charAt(0).toUpperCase() + t.slice(1)))
+            }
+            if (repo.language && !techTags.some(t => t.toLowerCase() === repo.language!.toLowerCase())) {
+              techTags.unshift(repo.language)
+            }
+            if (techTags.length === 0) techTags.push('Code')
+
+            const title = repo.name
+              .replace(/[-_]/g, ' ')
+              .replace(/\b\w/g, c => c.toUpperCase())
+
+            return {
+              title,
+              description: repo.description || 'A project by Karthik Ramadugu.',
+              tech: techTags,
+              link: repo.html_url,
+              live: repo.homepage || null,
+              featured: true,
+              color: colorPairs[i % colorPairs.length]
+            }
+          })
+          setDynamicProjects(mapped)
+        }
+      } catch {
+        // fallback to hardcoded projects
+      } finally {
+        setProjectsLoading(false)
+      }
+    }
+    fetchRepos()
+  }, [])
+
+  const projects = dynamicProjects || fallbackProjects
 
   const journey = [
     {
@@ -578,9 +649,27 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center text-[#8888a4] font-jetbrains mb-16 text-sm"
           >
-            Only live & working projects — no placeholders
+            Auto-updated from GitHub — always showing my latest work
           </motion.p>
           
+          {projectsLoading ? (
+            <div className="grid md:grid-cols-2 gap-8">
+              {[0, 1].map((i) => (
+                <div key={i} className="card-glass p-8 animate-pulse">
+                  <div className="h-7 w-28 bg-[#e4e4ec] rounded-full mb-5" />
+                  <div className="h-7 w-3/4 bg-[#e4e4ec] rounded mb-3" />
+                  <div className="h-4 w-full bg-[#e4e4ec] rounded mb-2" />
+                  <div className="h-4 w-5/6 bg-[#e4e4ec] rounded mb-5" />
+                  <div className="flex gap-2 mb-6">
+                    {[0, 1, 2].map((j) => (
+                      <div key={j} className="h-8 w-20 bg-[#e4e4ec] rounded-lg" />
+                    ))}
+                  </div>
+                  <div className="h-4 w-32 bg-[#e4e4ec] rounded" />
+                </div>
+              ))}
+            </div>
+          ) : (
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
               <motion.div
@@ -633,6 +722,7 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+          )}
         </div>
       </section>
 
